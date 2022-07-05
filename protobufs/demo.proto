@@ -1,0 +1,89 @@
+// generate code with:
+// `cd email_service`
+// `python -m grpc_tools.protoc -I ../protobufs --python_out=. --grpc_python_out=. ../protobufs/demo.proto`
+syntax = "proto3";
+
+// -----------------General Use-----------------
+
+enum ResponseCode {
+    SUCCESS = 0;
+    EXECUTION_FAILED = 1;
+    REQUEST_DECLINED = 2;
+    INVALID_RECIPIENT = 3;
+    INVALID_CUSTOMER = 4;
+    INVALID_NAME = 5;
+    INVALID_ADDRESS = 6;
+    INVALID_EMAIL = 7;
+    INVALID_PHONE = 8;
+    UNKNOWN_USER_ID = 9;
+}
+
+message Address {
+    string street_name = 1;
+    int32 street_number = 2;
+    string city = 3;
+    string zip = 4;
+}
+
+// -----------------Email service-----------------
+
+message EmailRequest {
+    string recipient = 1;
+    string topic = 2;
+    string body = 3;
+}
+
+message EmailResponse {
+    ResponseCode responseCode = 1;
+}
+
+service Email {
+    rpc Send (EmailRequest) returns (EmailResponse);
+}
+
+// -----------------Account service-----------------
+
+service Account {
+    rpc CreateAccount (UserInformation) returns (CreateAccountResponse);
+    rpc RequestUserInformation (UserID) returns (UserInformationResponse);
+}
+
+message UserInformation {
+    string last_name = 1;
+    string first_name = 2;
+    Address address = 3;
+    string email = 5;
+    string phone = 6;
+}
+
+message CreateAccountResponse {
+    repeated ResponseCode responseCodes = 1;
+    int32 user_id = 2;
+}
+
+message UserID {
+    int32 user_id = 1;
+}
+
+message UserInformationResponse {
+    ResponseCode responseCode = 1;
+    UserInformation user_information = 2;
+}
+
+// -----------------Courier service-----------------
+
+service Courier {
+    rpc RequestCourier (CourierRequest) returns (CourierRequestResponse);
+}
+
+message CourierRequest {
+    int32 customer_id = 1;
+    Address pickup_location = 2;
+    Address drop_off_location = 3;
+    int32 pickup_timestamp = 4;
+    int32 drop_off_timestamp = 5;
+}
+
+message CourierRequestResponse {
+    ResponseCode responseCode = 1;
+}
