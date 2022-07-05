@@ -1,0 +1,3 @@
+[submodule "demonstrator/frontend"]
+	path = demonstrator/frontend
+	url = git@github.com:fex01/tid-demonstrator-frontend.git
