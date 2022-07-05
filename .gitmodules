@@ -1,3 +1,12 @@
 [submodule "demonstrator/frontend"]
 	path = demonstrator/frontend
 	url = git@github.com:fex01/tid-demonstrator-frontend.git
+[submodule "demonstrator/courierservice"]
+	path = demonstrator/courierservice
+	url = git@github.com:fex01/tid-demonstrator-courierservice.git
+[submodule "demonstrator/accountservice"]
+	path = demonstrator/accountservice
+	url = git@github.com:fex01/tid-demonstrator-accountservice.git
+[submodule "demonstrator/emailservice"]
+	path = demonstrator/emailservice
+	url = git@github.com:fex01/tid-demonstrator-emailservice.git
