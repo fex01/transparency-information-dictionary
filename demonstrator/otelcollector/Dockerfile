@@ -1,5 +1,5 @@
 FROM otel/opentelemetry-collector-contrib:0.45.0
-COPY conf.yml .
+COPY demonstrator/otelcollector/conf.yml .
 EXPOSE 1888
 EXPOSE 8888
 EXPOSE 8889
