@@ -6,7 +6,7 @@ steps:
     - 'europe-north1-docker.pkg.dev/ti-dictionary/tid-docker-repository/tid-test'
     - .
     - '-f'
-    - Dockerfile
+    - demonstrator/test/Dockerfile
   id: Build
 - name: 'gcr.io/cloud-builders/docker'
   args:
