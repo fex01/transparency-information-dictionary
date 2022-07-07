@@ -1,4 +1,5 @@
 flask==2.1.2
+flask-healthz
 grpcio==1.47.0
 grpcio-tools==1.47.0
 opentelemetry-distro==0.31b0

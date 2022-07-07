@@ -1,7 +1,7 @@
 import os
 import datetime
 import traceback
-
+import flask-healthz
 import grpc
 import demo_pb2_grpc, demo_pb2
 from flask import Flask, request, render_template
@@ -15,6 +15,18 @@ trace.set_tracer_provider(tracer_provider)
 tracer_provider.add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
 
 app = Flask(__name__)
+app.register_blueprint(healthz, url_prefix="/healthz")
+
+HEALTHZ = {
+    "live": "app.checks.liveness",
+    "ready": "app.checks.readiness",
+}
+
+def liveness():
+    pass
+
+def readiness():
+    pass
 
 account_host = os.getenv("ACCOUNT_SERVICE_HOST", "localhost")
 account_port = os.getenv("ACCOUNT_SERVICE_PORT", "50053")

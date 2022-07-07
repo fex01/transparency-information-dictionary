@@ -64,10 +64,11 @@ services:
         #            dockerfile: demonstrator/account_service/Dockerfile_wt  # for performance measurements
         image: account_service
         environment:
+            - ACCOUNT_SERVICE_PORT
+            - EMAIL_SERVICE_HOST
+            - EMAIL_SERVICE_PORT
             - OTEL_EXPORTER_OTLP_ENDPOINT
             - OTEL_RESOURCE_ATTRIBUTES=service.name=accountservice
-            - EMAIL_SERVICE_PORT
-            - EMAIL_SERVICE_HOST
         hostname: "${ACCOUNT_SERVICE_HOST}"
         networks:
             - tt
@@ -84,12 +85,13 @@ services:
         #            dockerfile: demonstrator/courier_service/Dockerfile_wt  # for performance measurements
         image: courier_service
         environment:
+            - COURIER_SERVICE_PORT
+            - EMAIL_SERVICE_HOST
+            - EMAIL_SERVICE_PORT
+            - ACCOUNT_SERVICE_HOST
+            - ACCOUNT_SERVICE_PORT
             - OTEL_EXPORTER_OTLP_ENDPOINT
             - OTEL_RESOURCE_ATTRIBUTES=service.name=courierservice
-            - EMAIL_SERVICE_PORT
-            - EMAIL_SERVICE_HOST
-            - ACCOUNT_SERVICE_PORT
-            - ACCOUNT_SERVICE_HOST
         hostname: "${COURIER_SERVICE_HOST}"
         networks:
             - tt
@@ -107,14 +109,12 @@ services:
         #            dockerfile: demonstrator/frontend/Dockerfile_wt  # for performance measurements
         image: frontend
         environment:
+            - ACCOUNT_SERVICE_HOST
+            - ACCOUNT_SERVICE_PORT
+            - COURIER_SERVICE_HOST
+            - COURIER_SERVICE_PORT
             - OTEL_EXPORTER_OTLP_ENDPOINT
             - OTEL_RESOURCE_ATTRIBUTES=service.name=frontend
-            - EMAIL_SERVICE_PORT
-            - EMAIL_SERVICE_HOST
-            - ACCOUNT_SERVICE_PORT
-            - ACCOUNT_SERVICE_HOST
-            - COURIER_SERVICE_PORT
-            - COURIER_SERVICE_HOST
         hostname: "${FRONTEND_HOST}"
         networks:
             - tt
