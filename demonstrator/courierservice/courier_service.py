@@ -6,6 +6,10 @@ from signal import signal, SIGTERM
 import time
 
 import demo_pb2, demo_pb2_grpc
+from grpc_health.v1 import (
+    health_pb2,
+    health_pb2_grpc,
+)
 import logging
 from opentelemetry import trace
 from opentelemetry.sdk.trace import TracerProvider
@@ -32,6 +36,14 @@ account_stub = demo_pb2_grpc.AccountStub(account_channel)
 
 
 class CourierService(demo_pb2_grpc.CourierServicer):
+
+    def Check(self, request, context):
+        return health_pb2.HealthCheckResponse(
+            status=health_pb2.HealthCheckResponse.SERVING)
+
+    def Watch(self, request, context):
+        return health_pb2.HealthCheckResponse(
+            status=health_pb2.HealthCheckResponse.UNIMPLEMENTED)
 
     def RequestCourier(self, request, context):
         span = trace.get_current_span()
@@ -73,10 +85,17 @@ class CourierService(demo_pb2_grpc.CourierServicer):
         return address.street_name + " " + str(address.street_number) + ", " + address.zip + " " + address.city
 
 
+class HealthCheck():
+    def Check(self, request, context):
+        return health_pb2.HealthCheckResponse(
+            status=health_pb2.HealthCheckResponse.SERVING)
+
+
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 
     demo_pb2_grpc.add_CourierServicer_to_server(CourierService(), server)
+    health_pb2_grpc.add_HealthServicer_to_server(CourierService(), server)
     port = os.getenv("COURIER_SERVICE_PORT", "50052")
     server.add_insecure_port("[::]:" + port)
     server.start()

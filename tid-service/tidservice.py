@@ -3,6 +3,10 @@ from pprint import pprint
 
 import tid_pb2
 import tid_pb2_grpc
+from grpc_health.v1 import (
+    health_pb2,
+    health_pb2_grpc,
+)
 import grpc
 from concurrent import futures
 import logging
@@ -21,6 +25,14 @@ jaeger_server = query_pb2_grpc.QueryServiceStub(jaeger_channel)
 
 
 class TIDService(tid_pb2_grpc.TIDictServicer):
+
+    def Check(self, request, context):
+        return health_pb2.HealthCheckResponse(
+            status=health_pb2.HealthCheckResponse.SERVING)
+
+    def Watch(self, request, context):
+        return health_pb2.HealthCheckResponse(
+            status=health_pb2.HealthCheckResponse.UNIMPLEMENTED)
 
     # builds data disclosed property in TIL object
     def GetDataDisclosedOfType(self, keyword, context):
@@ -507,10 +519,17 @@ def if_exists(dictionary, key, default=""):
         return default
 
 
+class HealthCheck():
+    def Check(self, request, context):
+        return health_pb2.HealthCheckResponse(
+            status=health_pb2.HealthCheckResponse.SERVING)
+
+
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 
     tid_pb2_grpc.add_TIDictServicer_to_server(TIDService(), server)
+    health_pb2_grpc.add_HealthServicer_to_server(TIDService(), server)
     port = port = os.getenv("TID_SERVICE_PORT", "50050")
     server.add_insecure_port("[::]:" + port)
     server.start()

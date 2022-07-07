@@ -8,6 +8,10 @@ from signal import signal, SIGTERM
 import pyisemail
 
 import demo_pb2_grpc, demo_pb2
+from grpc_health.v1 import (
+    health_pb2,
+    health_pb2_grpc,
+)
 import logging
 from opentelemetry import trace
 from opentelemetry.sdk.trace import TracerProvider
@@ -20,6 +24,14 @@ tracer_provider.add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
 
 
 class AccountService(demo_pb2_grpc.AccountServicer):
+
+    def Check(self, request, context):
+        return health_pb2.HealthCheckResponse(
+            status=health_pb2.HealthCheckResponse.SERVING)
+
+    def Watch(self, request, context):
+        return health_pb2.HealthCheckResponse(
+            status=health_pb2.HealthCheckResponse.UNIMPLEMENTED)
 
     def __init__(self):
         """
@@ -105,10 +117,17 @@ class AccountService(demo_pb2_grpc.AccountServicer):
             )
 
 
+class HealthCheck():
+    def Check(self, request, context):
+        return health_pb2.HealthCheckResponse(
+            status=health_pb2.HealthCheckResponse.SERVING)
+
+
 def serve():
     server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 
     demo_pb2_grpc.add_AccountServicer_to_server(AccountService(), server)
+    health_pb2_grpc.add_HealthServicer_to_server(AccountService(), server)
     port = os.getenv("ACCOUNT_SERVICE_PORT", "50053")
     server.add_insecure_port("[::]:" + port)
     server.start()
