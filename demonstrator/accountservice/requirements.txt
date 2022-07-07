@@ -1,0 +1,7 @@
+grpcio==1.46.3
+grpcio-tools==1.46.3
+pytest==7.1.2
+pyIsEmail==1.4.0
+opentelemetry-distro==0.31b0
+opentelemetry-exporter-otlp-proto-grpc==1.11.1
+opentelemetry-instrumentation-grpc==0.31b0

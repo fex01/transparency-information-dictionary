@@ -130,6 +130,14 @@ dmypy.json
 
 # generated protobuf files
 *_pb2*py
+!tid-service/api_v3/*
+!tid-service/gogoproto/*
+!tid-service/protoc_gen_swagger/*
+!tid-service/collector_pb2*
+!tid-service/model_pb2*
+!tid-service/query_pb2*
+!tid-service/sampling_pb2*
+
 
 # diverse
 *~

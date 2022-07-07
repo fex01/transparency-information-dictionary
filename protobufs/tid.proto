@@ -1,0 +1,203 @@
+// generate code with:
+// `cd tidservice`
+// `python -m grpc_tools.protoc -I ../../protobufs --python_out=. --grpc_python_out=. ../../protobufs/tid.proto`
+syntax = "proto3";
+
+/// gib alle verfügbaren, kein Search Interface
+service TIDict {
+    rpc GetDataDisclosedOfType(DataDisclosedRequest) returns (DataDisclosedResponse);
+    rpc GetThirdCountryTransfers(TCTRequest) returns (TCTResponse);
+    rpc GetChangesOfPurpose(COPRequest) returns (COPResponse);
+    rpc GetTransparencyInformationFromTagList(TagListRequest) returns (TagListResponse);
+    rpc GetTransparencyInformationFromTraces(TransparencyInformationRequest) returns (TransparencyInformationResponse);
+}
+
+message DataDisclosedRequest {
+    DataDisclosedType value = 1;
+}
+
+message DataDisclosedResponse {
+    repeated DataDisclosedEntry list = 1;
+}
+
+message TCTRequest {}
+
+message TCTResponse {
+    repeated ThirdCountryTransfer third_country_transfers = 1;
+}
+
+message COPRequest {}
+
+message COPResponse {
+    repeated ChangesOfPurpose changes_of_purposes = 1;
+}
+
+message TagListRequest {
+    string tags = 1;
+}
+
+message TagListResponse {
+    oneof kind {
+        NullValue null_value = 1;
+        DataDisclosed data_disclosed = 2;
+        ThirdCountryTransfer third_country_transfer = 3;
+        ChangesOfPurpose change_of_purpose = 4;
+    }
+}
+
+message TransparencyInformationRequest {
+    int32 cover_traces_of_the_last_x_min = 1;
+}
+
+message TransparencyInformationResponse {
+    repeated ServiceRelatedTransparencyInformation services = 1;
+    message ServiceRelatedTransparencyInformation {
+        string service = 1;
+        repeated DataDisclosed data_disclosed_entries = 2;
+        repeated ThirdCountryTransfer third_country_transfers = 3;
+        repeated ChangesOfPurpose changes_of_purposes = 4;
+    }
+}
+
+enum DataDisclosedType {
+    CATEGORY = 0;
+    PURPOSE = 1;
+    LEGAL_BASE = 2;
+    RECIPIENT = 3;
+    STORAGE = 4;
+}
+
+message DataDisclosedEntry {
+    oneof kind {
+        NullValue null_value = 1;
+        Category category = 2;
+        Purpose purpose = 3;
+        LegalBase legal_base = 4;
+        Recipient recipient = 5;
+        Storage storage = 6;
+    }
+}
+
+enum NullValue {
+  // Null value.
+  NULL_VALUE = 0;
+}
+
+
+message Category {
+    string id = 1;
+    string value = 2;
+}
+
+message Purpose {
+    string id = 1;
+    string purpose = 2;
+    string description = 3;
+    repeated Purpose child = 4;
+}
+
+message LegalBase {
+    string reference = 1;
+    string short_description = 2;
+    string description = 3;
+}
+
+message Recipient {
+    string id = 1;
+    string name = 2;
+    string division = 3;
+    string address = 4;
+    string country = 5;
+    Representative representative = 6;
+    string category = 7;
+    message Representative {
+        string name = 1;
+        string email = 2;
+        string phone = 3;
+    }
+}
+
+enum Aggregation {
+    MAX = 0;
+    MIN = 1;
+    SUM = 2;
+    AVG = 3;
+}
+
+message Storage {
+    string id = 1;
+    string description = 2;
+    string ttl = 3;
+    Type type = 4;
+    enum Type {
+        TEMPORAL = 0;
+        PURPOSE = 1;
+        LEGAL = 2;
+    }
+}
+
+message DataDisclosed {
+    string id = 1;
+    string category = 2;
+    repeated Purpose purposes = 3;
+    repeated LegalBase legal_bases = 4;
+    repeated LegitimateInterest legitimate_interests = 5;
+    repeated Recipient recipients = 6;
+    repeated StorageTilt storage = 7;
+    NonDisclosure non_disclosure = 8;
+
+    message LegitimateInterest {
+        bool exits = 1;
+        string reasoning = 2;
+    }
+    message StorageTilt {
+        repeated Temporal temporal = 1;
+        repeated string purposeConditional = 2;
+        repeated string legalBasisConditional = 3;
+        Aggregation aggregationFunction = 4;
+        message Temporal {
+            string description = 1;
+            string ttl = 2;
+        }
+    }
+    message NonDisclosure {
+        bool legal_requirement = 1;
+        bool contractual_regulation = 2;
+        bool obligationToProvide = 3;
+        string consequences = 4;
+    }
+}
+
+message ThirdCountryTransfer {
+    string id = 1;
+    string country = 2;
+    AdequacyDecision adequacy_decision = 3;
+    AppropriateGuarantees appropriate_guarantees = 4;
+    PresenceOfEnforceableRightsAndEffectiveRemedies presence_of_enforceable_rights_and_effective_remedies = 5;
+    StandardDataProtectionClause standard_data_protection_clause = 6;
+    message AdequacyDecision {
+        bool available = 1;
+        string description = 2;
+    }
+    message AppropriateGuarantees {
+        bool available = 1;
+        string description = 2;
+    }
+    message PresenceOfEnforceableRightsAndEffectiveRemedies {
+        bool available = 1;
+        string description = 2;
+    }
+    message StandardDataProtectionClause {
+        bool available = 1;
+        string description = 2;
+    }
+}
+
+message ChangesOfPurpose {
+    string id = 1;
+    string description = 2;
+    repeated Category affected_data_categories = 3;
+    string planned_date_of_change = 4;
+    string url_of_new_version = 5;
+}
+
