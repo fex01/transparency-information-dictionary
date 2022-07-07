@@ -1,11 +1,11 @@
 FROM python:3.9-slim
 
-RUN SERVICE_PATH=./demonstrator/test/
-RUN PROTO_FILE=demo.proto
+# RUN SERVICE_PATH=./demonstrator/test/
+# RUN PROTO_FILE=demo.proto
 
 RUN mkdir /services
 COPY protobufs/ /services/protobufs/
-COPY ${SERVICE_PATH} /services/email_service/
+COPY demonstrator/test/ /services/email_service/
 WORKDIR /services/email_service
 RUN python -m pip install --upgrade pip
 RUN python -m pip install -r requirements.txt
