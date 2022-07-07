@@ -3,25 +3,15 @@ steps:
   args:
     - build
     - '-t'
-    - 'europe-north1-docker.pkg.dev/$PROJECT_ID/tid-docker-repository/tid-test'
+    - '$_DEPLOY_REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$TRIGGER_NAME'
     - .
     - '-f'
-    - demonstrator/test/Dockerfile
+    - $_DOCKERFILE_PATH/Dockerfile
   id: Build
 - name: 'gcr.io/cloud-builders/docker'
   args:
     - push
-    - 'europe-north1-docker.pkg.dev/$PROJECT_ID/tid-docker-repository/tid-test'
+    - '$_DEPLOY_REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$TRIGGER_NAME:$COMMIT_SHA'
   id: Push
 images:
-  - 'europe-north1-docker.pkg.dev/$PROJECT_ID/tid-docker-repository/tid-test'
-# options:
-#   substitutionOption: ALLOW_LOOSE
-# substitutions:
-#   REPO_NAME: tid-docker-repository
-#   _GCR_HOSTNAME: eu.gcr.io
-#   _PLATFORM: managed
-#   _LABELS: gcb-trigger-id=2cac9029-a121-4a64-a9a6-9459f59d971f
-#   _TRIGGER_ID: 2cac9029-a121-4a64-a9a6-9459f59d971f
-#   _SERVICE_NAME: tid-demonstrator-frontend
-#   _DEPLOY_REGION: europe-north1
+  - '$_DEPLOY_REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$TRIGGER_NAME:$COMMIT_SHA'
