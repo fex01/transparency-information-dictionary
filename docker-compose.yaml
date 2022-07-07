@@ -1,0 +1,155 @@
+name: transparency_tracing
+
+services:
+    jaeger:
+        image: jaegertracing/opentelemetry-all-in-one:latest
+        environment:
+            - COLLECTOR_ZIPKIN_HOST_PORT
+        hostname: "${JAEGER_HOST}"
+        networks:
+            - tt
+        ports:
+            - "5775:5775" # accept zipkin.thrift over compact thrift protocol
+            - "5778:5778" # serve configs
+            - "6831:6831" # accept jaeger.thrift over compact thrift protocol
+            - "6832:6832" # accept jaeger.thrift over binary thrift protocol
+            - "9411:9411" # Zipkin compatible endpoint
+            - "14250:14250" # accept model.proto
+            - "14268:14268" # accept jaeger.thrift directly from clients
+            - "14269:14269" # admin port: health check at / and metrics at /metrics
+            - "${JAEGER_QUERY_PORT}:16685" # Protobuf/gRPC QueryService
+            - "16686:16686" # serve frontend
+    otelcollector:
+        build:
+            context: .
+            dockerfile: demonstrator/otelcollector/Dockerfile
+        image: otelcollector
+        hostname: "${OTEL_COLLECTOR_HOST}"
+        #        volumes:
+        #            # to export traces in a json file
+        #            - type: bind
+        #              source: ./traces
+        #              target: /traces
+        networks:
+            - tt
+        ports:
+            - "1888:1888" # pprof extension
+            - "13133:13133" # health_check extension
+            - "4317:4317" # OTLP gRPC receiver
+            - "4318:4318" # OTLP http receiver
+            - "55679:55679" # zpages extension: http://localhost:55679/debug/servicez
+        depends_on:
+            - jaeger
+    email_service:
+        build:
+            context: .
+            dockerfile: demonstrator/emailservice/Dockerfile
+        #            dockerfile: demonstrator/email_service/Dockerfile_wt  # for performance measurements
+        image: email_service
+        environment:
+            - OTEL_EXPORTER_OTLP_ENDPOINT
+            - OTEL_RESOURCE_ATTRIBUTES=service.name=emailservice
+        hostname: "${EMAIL_SERVICE_HOST}"
+        networks:
+            - tt
+        ports:
+            - "${EMAIL_SERVICE_PORT}:${EMAIL_SERVICE_PORT}"
+        depends_on:
+            - jaeger
+            - otelcollector
+    account_service:
+        build:
+            context: .
+            dockerfile: demonstrator/accountservice/Dockerfile
+        #            dockerfile: demonstrator/account_service/Dockerfile_wt  # for performance measurements
+        image: account_service
+        environment:
+            - OTEL_EXPORTER_OTLP_ENDPOINT
+            - OTEL_RESOURCE_ATTRIBUTES=service.name=accountservice
+            - EMAIL_SERVICE_PORT
+            - EMAIL_SERVICE_HOST
+        hostname: "${ACCOUNT_SERVICE_HOST}"
+        networks:
+            - tt
+        ports:
+            - "${ACCOUNT_SERVICE_PORT}:${ACCOUNT_SERVICE_PORT}"
+        depends_on:
+            - jaeger
+            - otelcollector
+            - email_service
+    courier_service:
+        build:
+            context: .
+            dockerfile: demonstrator/courierservice/Dockerfile
+        #            dockerfile: demonstrator/courier_service/Dockerfile_wt  # for performance measurements
+        image: courier_service
+        environment:
+            - OTEL_EXPORTER_OTLP_ENDPOINT
+            - OTEL_RESOURCE_ATTRIBUTES=service.name=courierservice
+            - EMAIL_SERVICE_PORT
+            - EMAIL_SERVICE_HOST
+            - ACCOUNT_SERVICE_PORT
+            - ACCOUNT_SERVICE_HOST
+        hostname: "${COURIER_SERVICE_HOST}"
+        networks:
+            - tt
+        ports:
+            - "${COURIER_SERVICE_PORT}:${COURIER_SERVICE_PORT}"
+        depends_on:
+            - jaeger
+            - otelcollector
+            - email_service
+            - account_service
+    frontend:
+        build:
+            context: .
+            dockerfile: demonstrator/frontend/Dockerfile
+        #            dockerfile: demonstrator/frontend/Dockerfile_wt  # for performance measurements
+        image: frontend
+        environment:
+            - OTEL_EXPORTER_OTLP_ENDPOINT
+            - OTEL_RESOURCE_ATTRIBUTES=service.name=frontend
+            - EMAIL_SERVICE_PORT
+            - EMAIL_SERVICE_HOST
+            - ACCOUNT_SERVICE_PORT
+            - ACCOUNT_SERVICE_HOST
+            - COURIER_SERVICE_PORT
+            - COURIER_SERVICE_HOST
+        hostname: "${FRONTEND_HOST}"
+        networks:
+            - tt
+        ports:
+            - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+        depends_on:
+            - jaeger
+            - otelcollector
+            - account_service
+            - courier_service
+    tidservice:
+        build:
+            context: .
+            dockerfile: tid-service/Dockerfile
+        image: tidservice
+        environment:
+            - JAEGER_HOST
+            - JAEGER_QUERY_PORT
+            - TID_SERVICE_HOST
+            - TID_SERVICE_PORT
+            - TI_DICTIONARY_NAME
+        volumes:
+            # - type: bind                    # for development only
+            #   source: tid-service
+            #   target: /services/tidservice
+            #   read_only: true
+            - type: bind
+              source: ./dictionary
+              target: /services/dictionary
+              read_only: true
+        hostname: "${TID_SERVICE_HOST}"
+        networks:
+            - tt
+        ports:
+            - "${TID_SERVICE_PORT}:${TID_SERVICE_PORT}"
+
+networks:
+    tt:

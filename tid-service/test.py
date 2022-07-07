@@ -109,11 +109,11 @@ class TestTIDictService(unittest.TestCase):
         response = tid_server.GetTransparencyInformationFromTraces(
             tid_pb2.TransparencyInformationRequest(cover_traces_of_the_last_x_min=30), None
         )
-        # pprint(response)
+        pprint(response)
         for item in response.services:
             if item.service == "emailservice":
                 emailservice = item
-        pprint(emailservice)
+        # pprint(emailservice)
         assert emailservice.service == "emailservice"
         assert emailservice.data_disclosed_entries[0].id == "C01_R02_COA7_C1_ST11"
         assert emailservice.data_disclosed_entries[0].category == "E-mail address"

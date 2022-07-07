@@ -1,0 +1,695 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema",
+  "type": "object",
+  "title": "Dictionary for Transparency Information and related IDs",
+  "description": "This schema defines the dictionary for transparency information and allows a developer to use standardized IDs to tag transparency sensitive data that he/she uses in the application.",
+  "dataDisclosed": {
+    "category": [
+      {
+        "id": "C01",
+        "value": "E-mail address"
+      },
+      {
+        "id": "C02",
+        "value": "Telephone number"
+      },
+      {
+        "id": "C03",
+        "value": "Residential address"
+      },
+      {
+        "id": "C04",
+        "value": "Social media account"
+      },
+      {
+        "id": "C05",
+        "value": "Birthday"
+      },
+      {
+        "id": "C06",
+        "value": "Employee ID"
+      },
+      {
+        "id": "C07",
+        "value": "Name"
+      },
+      {
+        "id": "C08",
+        "value": "Gender"
+      },
+      {
+        "id": "C09",
+        "value": "Place of birth"
+      },
+      {
+        "id": "C10",
+        "value": "Nationality"
+      },
+      {
+        "id": "C11",
+        "value": "Credit score"
+      }
+    ],
+    "purposes": [
+      {
+        "id": "DATA1",
+        "purpose": "Deals and Transaction Activities",
+        "description": "Data are processed for any deals and transactions that are made by the company externally or internally.",
+        "child": [
+          {
+            "id": "DATA1_IS1",
+            "purpose": "Internal Sales",
+            "description": "Data are processed for any sales activities inside the company."
+          },
+          {
+            "id": "DATA1_RS2",
+            "purpose": "Regional Sales",
+            "description": "Data are processed for any sales activities on a regional level."
+          },
+          {
+            "id": "DATA1_NS3",
+            "purpose": "National Sales",
+            "description": "Data are processed for any sales activities on a national level."
+          },
+          {
+            "id": "DATA1_IS4",
+            "purpose": "International Sales",
+            "description": "Data are processed for any sales activities on an international level."
+          }
+        ]
+      },
+      {
+        "id": "CAPA2",
+        "purpose": "Commerce and Promotion Activities",
+        "description": "Data are processed for any commercial and promotional activities.",
+        "child": [
+          {
+            "id": "CAPA2_CM1",
+            "purpose": "Content Marketing",
+            "description": "Data are processed for any marketing activities focused on content production."
+          },
+          {
+            "id": "CAPA2_SMM2",
+            "purpose": "Social Media Marketing",
+            "description": "Data are processed for any marketing activities focused on social media."
+          },
+          {
+            "id": "CAPA2_DM3",
+            "purpose": "Direct Marketing",
+            "description": "Data are processed for any marketing activities focused on direct customer communication."
+          },
+          {
+            "id": "CAPA2_MR4",
+            "purpose": "Market Research",
+            "description": "Data are processed for gaining knowledge through market research."
+          },
+          {
+            "id": "CAPA2_PM5",
+            "purpose": "Product Marketing",
+            "description": "Data are processed for any marketing activities focused on products."
+          }
+        ]
+      },
+      {
+        "id": "EA3",
+        "purpose": "Enterprise Actions",
+        "description": "Data are processed for any enterprise actions that the company operationalizes.",
+        "child": [
+          {
+            "id": "EA3_SO1",
+            "purpose": "Service Operations",
+            "description": "Data are processed for any service operations of the company."
+          },
+          {
+            "id": "EA3_MO2",
+            "purpose": "Merchandising Operations",
+            "description": "Data are processed for any merchandising operations of the company."
+          },
+          {
+            "id": "EA3_MO3",
+            "purpose": "Manufacturing Operations",
+            "description": "Data are processed for any manufacturing operations of the company."
+          }
+        ]
+      },
+      {
+        "id": "ERA4",
+        "purpose": "Employee Related Activities",
+        "description": "Data are processed for any activities that are focused on the company's employees.",
+        "child": [
+          {
+            "id": "ERA4_R1",
+            "purpose": "Recruitment",
+            "description": "Data are processed for any recruitment activities."
+          },
+          {
+            "id": "ERA4_WS2",
+            "purpose": "Workplace Safety",
+            "description": "Data are processed for any activities that are concerned with workplace safety."
+          },
+          {
+            "id": "ERA4_ER3",
+            "purpose": "Employee Relations",
+            "description": "Data are processed for any activities that are concerned with employee relations."
+          },
+          {
+            "id": "ERA4_CP4",
+            "purpose": "Compensation Planning",
+            "description": "Data are processed for any activities that focus on compensation planning."
+          },
+          {
+            "id": "ERA4_LLC5",
+            "purpose": "Labor Law Compliance",
+            "description": "Data are processed for any activities that focus on labor law compliance."
+          },
+          {
+            "id": "ERA4_T6",
+            "purpose": "Training",
+            "description": "Data are processed for any activities that focus on employee training."
+          }
+        ]
+      },
+      {
+        "id": "IUOIT5",
+        "purpose": "Internal Usage of Information Technology",
+        "description": "Data are processed for any activities that are using information technology inside the company.",
+        "child": [
+          {
+            "id": "IUOIT5_ITS1",
+            "purpose": "IT Support",
+            "description": "Data are processed for any activities that focus on internal IT support."
+          },
+          {
+            "id": "IUOIT5_ITM2",
+            "purpose": "IT Management",
+            "description": "Data are processed for any activities that focus on IT management."
+          },
+          {
+            "id": "IUOIT5_ITO3",
+            "purpose": "IT Operations",
+            "description": "Data are processed for any activities that focus on the operations of IT."
+          },
+          {
+            "id": "IUOIT5_SA4",
+            "purpose": "System Administration",
+            "description": "Data are processed for any activities that focus on the system administration."
+          },
+          {
+            "id": "IUOIT5_NA5",
+            "purpose": "Network Administration",
+            "description": "Data are processed for any activities that focus on the network administration."
+          }
+        ]
+      },
+      {
+        "id": "FA6",
+        "purpose": "Financial Activities",
+        "description": "Data are processed for any activities that are focused on finance.",
+        "child": [
+          {
+            "id": "FA6_SP1",
+            "purpose": "Strategic Planning",
+            "description": "Data are processed for any activities that are focused on strategic planning."
+          },
+          {
+            "id": "FA6_WCM2",
+            "purpose": "Working Capital Management",
+            "description": "Data are processed for any activities that are focused on working capital management."
+          },
+          {
+            "id": "FA6_CB3",
+            "purpose": "Capital Budgeting",
+            "description": "Data are processed for any activities that are focused on working captial budgeting."
+          },
+          {
+            "id": "FA6_RM4",
+            "purpose": "Risk Management",
+            "description": "Data are processed for any activities that are focused on risk management."
+          },
+          {
+            "id": "FA6_CD5",
+            "purpose": "Corporate Development",
+            "description": "Data are processed for any activities that are focused on corporate development."
+          }
+        ]
+      },
+      {
+        "id": "COA7",
+        "purpose": "Customer Focused Actions",
+        "description": "Data are processed for any activities that are focused solely on the customer.",
+        "child": [
+          {
+            "id": "COA7_C1",
+            "purpose": "Communications",
+            "description": "Data are processed for any activities that are focused on communication with the customer."
+          },
+          {
+            "id": "COA7_CM2",
+            "purpose": "Channel Management",
+            "description": "Data are processed for any activities that are focused on channel management."
+          },
+          {
+            "id": "COA7_CS3",
+            "purpose": "Customer Support",
+            "description": "Data are processed for any activities that are focused on supporting the customer."
+          },
+          {
+            "id": "COA7_CR4",
+            "purpose": "Customer Retention",
+            "description": "Data are processed for any activities that are focused on the retention of the customer."
+          }
+        ]
+      },
+      {
+        "id": "PA8",
+        "purpose": "Purchasing Activities",
+        "description": "Data are processed for any activities that are focused on purchasing any materials or services required by the company."
+      },
+      {
+        "id": "LALEA9",
+        "purpose": "Legal and Law Enforcement Actions",
+        "description": "Data are processed for any activities that are focused on juridical matters of the company.",
+        "child": [
+          {
+            "id": "LALEA9_CL1",
+            "purpose": "Corporate Law",
+            "description": "Data are processed for any activities that are focused on corporate law."
+          },
+          {
+            "id": "LALEA9_FL2",
+            "purpose": "Finance Law",
+            "description": "Data are processed for any activities that are focused on financial law."
+          },
+          {
+            "id": "LALEA9_EL3",
+            "purpose": "Employment Law",
+            "description": "Data are processed for any activities that are focused on employement law."
+          },
+          {
+            "id": "LALEA9_EL4",
+            "purpose": "Environmental Law",
+            "description": "Data are processed for any activities that are focused on environmental law."
+          },
+          {
+            "id": "LALEA9_IPL5",
+            "purpose": "Intellectual Property Law",
+            "description": "Data are processed for any activities that are focused on intellectual property law."
+          },
+          {
+            "id": "LALEA9_CL6",
+            "purpose": "Contract Law",
+            "description": "Data are processed for any activities that are focused on contract law."
+          },
+          {
+            "id": "LALEA9_CL7",
+            "purpose": "Consumer Law",
+            "description": "Data are processed for any activities that are focused on consumer law."
+          },
+          {
+            "id": "LALEA9_TL8",
+            "purpose": "Tax Law",
+            "description": "Data are processed for any activities that are focused on tax law."
+          }
+        ]
+      }
+    ],
+    "legalBase": [
+      {
+        "id": "GDPR-13-1-a",
+        "shortDescription": "Identity of controller (data collected)",
+        "description": "The data are processed on the basis of Art. GDPR-13-1-a. Which states where personal data relating to a data subject are collected from the data subject, the controller shall, at the time when personal data are obtained, provide the data subject with all of the following information: the identity and the contact details of the controller and, where applicable, of the controller’s representative."
+      },
+      {
+        "id": "GDPR-14-1-a",
+        "shortDescription": "Identity of controller (data not obtained)",
+        "description": "The data are processed on the basis of Art. GDPR-14-1-a. Which states where personal data have not been obtained from the data subject, the controller shall provide the data subject with the following information: the identity and the contact details of the controller and, where applicable, of the controller’s representative."
+      },
+      {
+        "id": "GDPR-30-1-a",
+        "shortDescription": "Controller maintains record of processing activities",
+        "description": "The data are processed on the basis of Art. GDPR-30-1-a. Which states each controller and, where applicable, the controller’s representative, shall maintain a record of processing activities under its responsibility. That record shall contain all of the following information: the name and contact details of the controller and, where applicable, the joint controller, the controller’s representative and the data protection officer."
+      },
+      {
+        "id": "GDPR-13-1-b",
+        "shortDescription": "Contact of data protection officer (data collected)",
+        "description": "The data are processed on the basis of Art. GDPR-13-1-b. Which states where personal data relating to a data subject are collected from the data subject, the controller shall, at the time when personal data are obtained, provide the data subject with all of the following information: the contact details of the data protection officer, where applicable."
+      },
+      {
+        "id": "GDPR-14-1-b",
+        "shortDescription": "Contact of data protection officer (data not obtained)",
+        "description": "The data are processed on the basis of Art. GDPR-14-1-b. Which states where personal data have not been obtained from the data subject, the controller shall provide the data subject with the following information: the contact details of the data protection officer, where applicable."
+      },
+      {
+        "id": "GDPR-13-1-c",
+        "shortDescription": "Purposes of processing (data collected)",
+        "description": "The data are processed on the basis of Art. GDPR-13-1-c. Which states where personal data relating to a data subject are collected from the data subject, the controller shall, at the time when personal data are obtained, provide the data subject with all of the following information: the purposes of the processing for which the personal data are intended as well as the legal basis for the processing."
+      },
+      {
+        "id": "GDPR-14-1-c",
+        "shortDescription": "Purposes of processing (data not obtained)",
+        "description": "The data are processed on the basis of Art. GDPR-14-1-c. Which states where personal data have not been obtained from the data subject, the controller shall provide the data subject with the following information: the purposes of the processing for which the personal data are intended as well as the legal basis for the processing."
+      },
+      {
+        "id": "GDPR-14-2-b",
+        "shortDescription": "Location of processing bases",
+        "description": "The data are processed on the basis of Art. GDPR-14-2-b. Which states in addition to the information referred to in paragraph 1, the controller shall provide the data subject with the following information necessary to ensure fair and transparent processing in respect of the data subject: where the processing is based on point (f) of Article 6(1), the legitimate interests pursued by the controller or by a third party."
+      },
+      {
+        "id": "GDPR-14-1-e",
+        "shortDescription": "Recipients of personal data",
+        "description": "The data are processed on the basis of Art. GDPR-14-1-e. Which states where personal data have not been obtained from the data subject, the controller shall provide the data subject with the following information: 1. the recipients or categories of recipients of the personal data, if any;."
+      },
+      {
+        "id": "GDPR-14-1-f",
+        "shortDescription": "Personal data transfer to third country",
+        "description": "The data are processed on the basis of Art. GDPR-14-1-f. Which states where personal data have not been obtained from the data subject, the controller shall provide the data subject with the following information: where applicable, that the controller intends to transfer personal data to a recipient in a third country or international organisation and the existence or absence of an adequacy decision by the Commission, or in the case of transfers referred to in Article 46 or 47, or the second subparagraph of Article 49(1), reference to the appropriate or suitable safeguards and the means to obtain a copy of them or where they have been made available."
+      },
+      {
+        "id": "GDPR-14-2-a",
+        "shortDescription": "Period of storing",
+        "description": "The data are processed on the basis of Art. GDPR-14-2-a. Which states in addition to the information referred to in paragraph 1, the controller shall provide the data subject with the following information necessary to ensure fair and transparent processing in respect of the data subject: the period for which the personal data will be stored, or if that is not possible, the criteria used to determine that period."
+      },
+      {
+        "id": "GDPR-14-2-c",
+        "shortDescription": "Access and erasure of personal data",
+        "description": "The data are processed on the basis of Art. GDPR-14-2-c. Which states in addition to the information referred to in paragraph 1, the controller shall provide the data subject with the following information necessary to ensure fair and transparent processing in respect of the data subject: the existence of the right to request from the controller access to and rectification or erasure of personal data or restriction of processing concerning the data subject and to object to processing as well as the right to data portability;."
+      },
+      {
+        "id": "GDPR-13-2-b",
+        "shortDescription": "Access and erasure of personal data (at time when obtained)",
+        "description": "The data are processed on the basis of Art. GDPR-13-2-b. Which states in addition to the information referred to in paragraph 1, the controller shall, at the time when personal data are obtained, provide the data subject with the following further information necessary to ensure fair and transparent processing: the existence of the right to request from the controller access to and rectification or erasure of personal data or restriction of processing concerning the data subject or to object to processing as well as the right to data portability."
+      },
+      {
+        "id": "GDPR-13-2-a",
+        "shortDescription": "Period of storing (at time when obtained)",
+        "description": "The data are processed on the basis of Art. GDPR-13-2-a. Which states in addition to the information referred to in paragraph 1, the controller shall, at the time when personal data are obtained, provide the data subject with the following further information necessary to ensure fair and transparent processing: the period for which the personal data will be stored, or if that is not possible, the criteria used to determine that period;."
+      },
+      {
+        "id": "GDPR-15-1-d",
+        "shortDescription": "Confirmation if processed and period",
+        "description": "The data are processed on the basis of Art. GDPR-15-1-d. Which states the data subject shall have the right to obtain from the controller confirmation as to whether or not personal data concerning him or her are being processed, and, where that is the case, access to the personal data and the following information: where possible, the envisaged period for which the personal data will be stored, or, if not possible, the criteria used to determine that period."
+      },
+      {
+        "id": "GDPR-15-1-e",
+        "shortDescription": "Confirmation if processed and erasure right",
+        "description": "The data are processed on the basis of Art. GDPR-15-1-e. Which states the data subject shall have the right to obtain from the controller confirmation as to whether or not personal data concerning him or her are being processed, and, where that is the case, access to the personal data and the following information: the existence of the right to request from the controller rectification or erasure of personal data or restriction of processing of personal data concerning the data subject or to object to such processing."
+      },
+      {
+        "id": "GDPR-13-2-c",
+        "shortDescription": "Bases of processing and right to withdraw (at time when obtained)",
+        "description": "The data are processed on the basis of Art. GDPR-13-2-c. Which states in addition to the information referred to in paragraph 1, the controller shall, at the time when personal data are obtained, provide the data subject with the following further information necessary to ensure fair and transparent processing: where the processing is based on point (a) of Article 6(1) or point (a) of Article 9(2), the existence of the right to withdraw consent at any time, without affecting the lawfulness of processing based on consent before its withdrawal."
+      },
+      {
+        "id": "GDPR-14-2-d",
+        "shortDescription": "Bases of processing and right to withdraw",
+        "description": "The data are processed on the basis of Art. GDPR-14-2-d. Which states in addition to the information referred to in paragraph 1, the controller shall provide the data subject with the following information necessary to ensure fair and transparent processing in respect of the data subject: where processing is based on point (a) of Article 6(1) or point (a) of Article 9(2), the existence of the right to withdraw consent at any time, without affecting the lawfulness of processing based on consent before its withdrawal."
+      },
+      {
+        "id": "GDPR-14-2-e",
+        "shortDescription": "Right to lodge a complaint",
+        "description": "The data are processed on the basis of Art. GDPR-14-2-e. Which states in addition to the information referred to in paragraph 1, the controller shall provide the data subject with the following information necessary to ensure fair and transparent processing in respect of the data subject: the right to lodge a complaint with a supervisory authority."
+      }
+    ],
+    "recipient": [
+      {
+        "id": "R01",
+        "name": "Yellow Company AG",
+        "division": "Product line e-mobility",
+        "address": "Triana 123, 9999 Seville",
+        "country": "ES",
+        "representative": {
+          "name": "Jane Super",
+          "email": "contact@yellowcompany.de",
+          "phone": "0049 151 1234 9876"
+        },
+        "category": "Marketing content provider"
+      },
+      {
+        "id": "R02",
+        "name": "Best Communication Delivery Company AG",
+        "division": "Third Party E-mail Service",
+        "address": "Triana 123, 9999 Seville",
+        "country": "ES",
+        "representative": {
+          "name": "Jane Super",
+          "email": "contact@yellowcompany.de",
+          "phone": "0049 151 1234 9876"
+        },
+        "category": "Service provider e-mail"
+      },
+      {
+        "id": "R03",
+        "category": "Customer research provider"
+      },
+      {
+        "id": "R04",
+        "category": "Customer support provider"
+      },
+      {
+        "id": "R05",
+        "category": "Customer relationship management provider"
+      },
+      {
+        "id": "R06",
+        "category": "Employee insurance provider"
+      }
+    ],
+    "storage": {
+      "temporal": [
+        {
+          "id": "ST01",
+          "description": "Creating backups.",
+          "ttl": "2005-08-09T18:31:42P3Y6M4DT12H30M17S"
+        },
+        {
+          "id": "ST02",
+          "description": "Finishing ordering process.",
+          "ttl": "2020-08-09T18:31:42P3Y6M4DT12H30M17S"
+        },
+        {
+          "id": "ST03",
+          "description": "Finishing sales process.",
+          "ttl": "2005-08-09T18:31:42P3Y6M4DT12H30M17S"
+        },
+        {
+          "id": "ST04",
+          "description": "Finishing hiring process.",
+          "ttl": "2020-08-09T18:31:42P3Y6M4DT12H30M17S"
+        },
+        {
+          "id": "ST05",
+          "description": "Finishing e-mail campaign.",
+          "ttl": "2005-08-09T18:31:42P3Y6M4DT12H30M17S"
+        },
+        {
+          "id": "ST06",
+          "description": "Finishing Social media post series",
+          "ttl": "2020-08-09T18:31:42P3Y6M4DT12H30M17S"
+        },
+        {
+          "id": "ST07",
+          "description": "Finishing training process.",
+          "ttl": "2005-08-09T18:31:42P3Y6M4DT12H30M17S"
+        },
+        {
+          "id": "ST08",
+          "description": "Finishing support process.",
+          "ttl": "2020-08-09T18:31:42P3Y6M4DT12H30M17S"
+        },
+        {
+          "id": "ST09",
+          "description": "Repairing a data leak.",
+          "ttl": "2005-08-09T18:31:42P3Y6M4DT12H30M17S"
+        },
+        {
+          "id": "ST10",
+          "description": "Repairing a server fail out.",
+          "ttl": "2020-08-09T18:31:42P3Y6M4DT12H30M17S"
+        },
+        {
+          "id": "ST11",
+          "description": "Live data - log detention time.",
+          "ttl": "P0Y0M1W0DT0H0M0S"
+        }
+      ],
+      "purposeConditional": [
+        {
+          "id": "SPC01",
+          "description": "Data is stored until the end of the ordering process."
+        },
+        {
+          "id": "SPC02",
+          "description": "Data is stored until the end of the sales process."
+        },
+        {
+          "id": "SPC03",
+          "description": "Data is stored until the end of the e-mail campaign."
+        },
+        {
+          "id": "SPC04",
+          "description": "Data is stored until the end of the Instagram post series."
+        },
+        {
+          "id": "SPC05",
+          "description": "Data is stored until the end of the Facebook post series."
+        },
+        {
+          "id": "SPC06",
+          "description": "Data is stored until the end of the Snapchat post campaign."
+        },
+        {
+          "id": "SPC07",
+          "description": "Data is stored until the end of the hiring process."
+        },
+        {
+          "id": "SPC08",
+          "description": "Data is stored until the end of the training process."
+        },
+        {
+          "id": "SPC09",
+          "description": "Data is stored until the end of the support process."
+        },
+        {
+          "id": "SPC10",
+          "description": "Data is stored until the end of the training phase."
+        }
+      ],
+      "legalBasisConditional": [
+        {
+          "id": "SL01",
+          "description": "SGB-100-42"
+        }
+      ]
+    },
+    "legitameteInterests": [
+      {
+        "id": "LI1",
+        "exists": true,
+        "reasoning": "There is a legitimate interest based on the requirement on the requirement to provide tax data to the state."
+      },
+      {
+        "id": "LI2",
+        "exists": true,
+        "reasoning": "There is a legitimate interest based on the requirement on the requirement to provide tax data to the finance ministry of the country."
+      },
+      {
+        "id": "LI3",
+        "exists": true,
+        "reasoning": "There is a legitimate interest based on the requirement to process data for the social insurance agency."
+      },
+      {
+        "id": "LI4",
+        "exists": false,
+        "reasoning": "There is no legitimate interest to process the data further."
+      }
+    ],
+    "nonDisclosure": [
+      {
+        "id": "ND01",
+        "legalRequirement": false,
+        "contractualRegulation": false,
+        "obligationToProvide": false,
+        "consequences": "If the data is not disclosed, the hiring process cannot be finished."
+      },
+      {
+        "id": "ND02",
+        "legalRequirement": true,
+        "contractualRegulation": true,
+        "obligationToProvide": false,
+        "consequences": "If the data is not disclosed, the M&A deal cannot be finished."
+      }
+    ]
+  },
+  "thirdCountryTransfers": [
+    {
+      "id": "TCT01",
+      "country": "ES",
+      "adequacyDecision": {
+        "available": true,
+        "description": "An adequacy decision was made on the 23rd April 2022 by "
+      },
+      "appropriateGuarantees": {
+        "available": true,
+        "description": "Here the appropriate guarantee was formulated by..."
+      },
+      "presenceOfEnforceableRightsAndEffectiveRemedies": {
+        "available": false,
+        "description": "These rights are given because of..."
+      },
+      "standardDataProtectionClause": {
+        "available": true,
+        "description": "The standard data protection clause which applies here can be found here: ..."
+      }
+    },
+    {
+      "id": "TCT02",
+      "country": "US",
+      "adequacyDecision": {
+        "available": true,
+        "description": "An adequacy decision was made on the 2nd of July 2022 by "
+      },
+      "appropriateGuarantees": {
+        "available": true,
+        "description": "Here the appropriate guarantee was formulated by..."
+      },
+      "presenceOfEnforceableRightsAndEffectiveRemedies": {
+        "available": true,
+        "description": "These rights are given because of..."
+      },
+      "standardDataProtectionClause": {
+        "available": true,
+        "description": "The standard data protection clause which applies here can be found here: ..."
+      }
+    }
+  ],
+  "changesOfPurpose": [
+    {
+      "id": "COP01",
+      "description": "Due to technical requirements we have to change the purpose of the following data categories. ",
+      "affectedDataCategories": [
+        {
+          "id": "C01",
+          "value": "E-mail address"
+        },
+        {
+          "id": "C11",
+          "value": "Credit score"
+        }
+      ],
+      "plannedDateOfChange": "2022-06-09",
+      "urlOfNewVersion": "https://greencomp.de/privacypolicy/2"
+    },
+    {
+      "id": "COP02",
+      "description": "Due to legal requirements we have to change the purposes of the following data categories.",
+      "affectedDataCategories": [
+        {
+          "id": "C02",
+          "value": "Telephone number"
+        },
+        {
+          "id": "C03",
+          "value": "Residential address"
+        }
+      ],
+      "plannedDateOfChange": "2022-07-02",
+      "urlOfNewVersion": "https://greencomp.de/privacypolicy/3"
+    },
+    {
+      "id": "COP03",
+      "description": "Due to external business requirements we have to change the purpose of the following data categories. ",
+      "affectedDataCategories": [
+        {
+          "id": "C06",
+          "value": "Employee ID"
+        },
+        {
+          "id": "C07",
+          "value": "Name"
+        }
+      ],
+      "plannedDateOfChange": "2022-07-02",
+      "urlOfNewVersion": "https://greencomp.de/privacypolicy/3"
+    }
+  ]
+}

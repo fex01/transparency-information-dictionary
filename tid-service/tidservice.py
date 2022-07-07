@@ -374,7 +374,8 @@ def search_list_for_tag(ti_list, tag, dd_type):
 
 
 def read_ti_dict():
-    with open("../dictionary/TransparencyInformationDictionary.json") as json_file:
+    dict_name = os.getenv("TI_DICTIONARY_NAME", "TransparencyInformationDictionary.json")
+    with open("../dictionary/" + dict_name) as json_file:
         data = json.load(json_file)
         return data
 
@@ -471,7 +472,7 @@ def create_storage(attribute_dict, storage_type) -> tid_pb2.Storage:
     return storage
 
 
-# creation of the storage property that is more til conform which means taking away the grnular id and description field (mapping description) as it does not exist in this way in TIl
+# creation of the storage property that is more til conform which means taking away the granular id and description field (mapping description) as it does not exist in this way in TIl
 def create_storage_tilt(temporals, purpose_conditionals, legal_conditionals,
                         aggregation=tid_pb2.MAX) -> tid_pb2.DataDisclosed.StorageTilt:
     tilt_temporals = []
