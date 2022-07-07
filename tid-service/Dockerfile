@@ -2,6 +2,7 @@ FROM python:3.9-slim
 
 RUN mkdir /services
 COPY protobufs/ /services/protobufs/
+COPY dictionary/ /services/dictionary/
 COPY tid-service/ /services/tidservice/
 WORKDIR /services/tidservice
 RUN python -m pip install --upgrade pip
