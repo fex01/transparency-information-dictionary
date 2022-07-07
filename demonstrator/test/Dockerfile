@@ -1,15 +1,12 @@
 FROM python:3.9-slim
 
-# RUN SERVICE_PATH=./demonstrator/test/
-# RUN PROTO_FILE=demo.proto
-
 RUN mkdir /services
 COPY protobufs/ /services/protobufs/
 COPY demonstrator/test/ /services/email_service/
 WORKDIR /services/email_service
 RUN python -m pip install --upgrade pip
 RUN python -m pip install -r requirements.txt
-RUN python -m grpc_tools.protoc -I ./protobufs --python_out=. --grpc_python_out=. ./protobufs/${PROTO_FILE}
+RUN python -m grpc_tools.protoc -I ./protobufs --python_out=. --grpc_python_out=. ./protobufs/demo.proto
 
 RUN apt-get -qq update \
   && apt-get install -y --no-install-recommends \
