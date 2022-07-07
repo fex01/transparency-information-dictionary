@@ -1,0 +1,17 @@
+steps:
+- name: gcr.io/cloud-builders/docker
+  args:
+    - build
+    - '-t'
+    - 'europe-north1-docker.pkg.dev/ti-dictionary/tid-docker-repository/tid-test'
+    - .
+    - '-f'
+    - Dockerfile
+  id: Build
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+    - push
+    - 'europe-north1-docker.pkg.dev/ti-dictionary/tid-docker-repository/tid-test'
+  id: Push
+images:
+  - 'europe-north1-docker.pkg.dev/ti-dictionary/tid-docker-repository/tid-test'
