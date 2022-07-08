@@ -9,6 +9,9 @@ RUN python -m pip install --upgrade pip
 RUN python -m pip install -r requirements.txt
 RUN python -m grpc_tools.protoc -I ../protobufs --python_out=. --grpc_python_out=. ../protobufs/tid.proto
 
+# for integration test generate demo.proto files
+RUN python -m grpc_tools.protoc -I ../protobufs --python_out=. --grpc_python_out=. ../protobufs/demo.proto
+
 RUN apt-get -qq update \
   && apt-get install -y --no-install-recommends \
   wget

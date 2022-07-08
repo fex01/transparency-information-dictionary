@@ -133,6 +133,14 @@ services:
         environment:
             - JAEGER_HOST
             - JAEGER_QUERY_PORT
+            - FRONTEND_HOST # for integration test
+            - FRONTEND_PORT # for integration test
+            - ACCOUNT_SERVICE_HOST # for integration test
+            - ACCOUNT_SERVICE_PORT # for integration test
+            - COURIER_SERVICE_HOST # for integration test
+            - COURIER_SERVICE_PORT # for integration test
+            - EMAIL_SERVICE_HOST # for integration test
+            - EMAIL_SERVICE_PORT # for integration test
             - TID_SERVICE_HOST
             - TID_SERVICE_PORT
             - TI_DICTIONARY_NAME

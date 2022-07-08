@@ -444,6 +444,18 @@ spec:
           value: "jaeger"
         - name: JAEGER_QUERY_PORT
           value: "16685"
+        - name: ACCOUNT_SERVICE_HOST
+          value: "accountservice"
+        - name: ACCOUNT_SERVICE_PORT
+          value: "6000"
+        - name: COURIER_SERVICE_HOST
+          value: "courierservice"
+        - name: COURIER_SERVICE_PORT
+          value: "7000"
+        - name: EMAIL_SERVICE_HOST
+          value: "emailservice"
+        - name: EMAIL_SERVICE_PORT
+          value: "8000"
         - name: TI_DICTIONARY_NAME
           value: "TransparencyInformationDictionary.json"
         readinessProbe:

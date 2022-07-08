@@ -1,8 +1,11 @@
 # run with `opentelemetry-instrument pytest integration_test.py` to generate trace
 import datetime
 import os
+import urllib
+from urllib import request, parse
 from urllib.request import urlopen
 import grpc
+
 import demo_pb2_grpc, demo_pb2
 from opentelemetry import trace
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
@@ -35,7 +38,7 @@ email_channel = grpc.insecure_channel(
 email_server = demo_pb2_grpc.EmailStub(email_channel)
 
 
-def test_email_service():
+def test_01_email_service():
     email_valide = demo_pb2.EmailRequest(
         recipient="test@miske.email", topic="email_valide", body="Test"
     )
@@ -43,7 +46,7 @@ def test_email_service():
     assert response.responseCode == demo_pb2.ResponseCode.SUCCESS
 
 
-def test_create_account():
+def test_02_create_account():
     user_details = demo_pb2.UserInformation(
         last_name="Mustermann",
         first_name="Max",
@@ -61,7 +64,7 @@ def test_create_account():
     assert response.user_id >= 0
 
 
-def test_request_user_information():
+def test_03_request_user_information():
     user_id = 0
     response = account_server.RequestUserInformation(
         demo_pb2.UserID(user_id=user_id)
@@ -69,7 +72,7 @@ def test_request_user_information():
     assert response.responseCode == demo_pb2.ResponseCode.SUCCESS
 
 
-def test_courier_service():
+def test_04_courier_service():
     pickup_time = datetime.datetime(year=2022, month=7, day=11, hour=10)
     drop_off_time = datetime.datetime(year=2022, month=7, day=15, hour=12)
     courier_request = demo_pb2.CourierRequest(
@@ -93,6 +96,16 @@ def test_courier_service():
     assert response.responseCode == demo_pb2.ResponseCode.SUCCESS
 
 
-def test_frontend():
+def test_05_frontend():
     homepage_html = urlopen("http://localhost:5000").read().decode("utf-8")
     assert "<title>Transparency Tracing Demo</title>" in homepage_html
+
+def test_06_frontend_create_account():
+    data = parse.urlencode({"create_account": "Create Account"}).encode()
+    homepage_html = urlopen("http://localhost:5000", data).read().decode("utf-8")
+    assert "response code: SUCCESS" in homepage_html
+
+def test_07_frontend_courier_service():
+    data = parse.urlencode({"request_courier": "Request Courier"}).encode()
+    homepage_html = urlopen("http://localhost:5000", data).read().decode("utf-8")
+    assert "response: SUCCESS" in homepage_html
