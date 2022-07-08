@@ -84,7 +84,7 @@ kind: Service
 metadata:
   name: jaeger-frontend
 spec:
-  type: NodePort
+  type: LoadBalancer
   selector:
     app: jaeger
   ports:
