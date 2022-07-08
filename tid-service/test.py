@@ -25,6 +25,7 @@ class TestTIDictService(unittest.TestCase):
         response = tid_server.GetDataDisclosedOfType(
             tid_pb2.DataDisclosedRequest(value=tid_pb2.CATEGORY), None
         )
+        print(response.list)
         assert response.list[0].category.id == "C01"
 
     def test_purpose(self):
@@ -83,6 +84,7 @@ class TestTIDictService(unittest.TestCase):
         response = tid_server.GetTransparencyInformationFromTagList(
             tid_pb2.TagListRequest(tags="[C01, R02, ST11]"), None
         )
+        pprint(response.data_disclosed)
         assert response.data_disclosed.id == "C01_R02_ST11"
         assert response.data_disclosed.category == "E-mail address"
         assert response.data_disclosed.storage[0].temporal[0].description == "Live data - log detention time."
@@ -113,7 +115,7 @@ class TestTIDictService(unittest.TestCase):
         for item in response.services:
             if item.service == "emailservice":
                 emailservice = item
-        # pprint(emailservice)
+        pprint(emailservice)
         assert emailservice.service == "emailservice"
         assert emailservice.data_disclosed_entries[0].id == "C01_R02_COA7_C1_ST11"
         assert emailservice.data_disclosed_entries[0].category == "E-mail address"

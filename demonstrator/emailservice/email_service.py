@@ -64,7 +64,7 @@ def serve():
     demo_pb2_grpc.add_EmailServicer_to_server(EmailService(), server)
     health_pb2_grpc.add_HealthServicer_to_server(EmailService(), server)
 
-    port = os.getenv("EMAIL_SERVICE_PORT", "50051")
+    port = os.getenv("EMAIL_SERVICE_PORT", "8000")
     # logger.info("listening on port: " + port)
     server.add_insecure_port("[::]:" + port)
     server.start()
