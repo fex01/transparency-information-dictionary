@@ -88,7 +88,7 @@ def create_account():
     try:
         response = account_server.CreateAccount(user_details)
     except Exception:
-        feedback += "account_channel: " + str(account_channel)
+        feedback += "account_channel: " + "f{account_host}:{account_port}"
         feedback += traceback.format_exc()
     else:
         for code in response.responseCodes:
@@ -126,7 +126,7 @@ def request_courier():
     try:
         response = courier_server.RequestCourier(courier_request)
     except Exception:
-        feedback += "courier_channel: " + str(courier_channel)
+        feedback += "courier_channel: " + "f{courier_host}:{courier_port}"
         feedback += traceback.format_exc()
     else:
         feedback += "response: " + demo_pb2.ResponseCode.Name(response.responseCode) + "\n"
