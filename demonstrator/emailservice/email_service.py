@@ -19,9 +19,6 @@ from opentelemetry.sdk.trace.export import (BatchSpanProcessor)
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 import googlecloudprofiler
 
-from logger import getJSONLogger
-logger = getJSONLogger('emailservice-server')
-
 tracer_provider = TracerProvider()
 trace.set_tracer_provider(tracer_provider)
 tracer_provider.add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
@@ -43,10 +40,10 @@ class EmailService(demo_pb2_grpc.EmailServicer):
         span.set_attribute("ti_c07", ["C07", "COA7_C1", "ST11"])
         span.set_attribute("ti_tct01", ["TCT01"])
 
-        logger.info('A request to send an email to {} has been received.'.format(request.recipient))
+        # logger.info('A request to send an email to {} has been received.'.format(request.recipient))
 
         if not pyisemail.is_email(request.recipient):
-            logger.info('"{}" is not a valid email address.'.format(request.recipient))
+            # logger.info('"{}" is not a valid email address.'.format(request.recipient))
             return EmailResponse(responseCode=ResponseCode.INVALID_RECIPIENT)
 
         # If you actually want to send an email_service do it here
@@ -68,7 +65,7 @@ def serve():
     health_pb2_grpc.add_HealthServicer_to_server(EmailService(), server)
 
     port = os.getenv("EMAIL_SERVICE_PORT", "50051")
-    logger.info("listening on port: " + port)
+    # logger.info("listening on port: " + port)
     server.add_insecure_port("[::]:" + port)
     server.start()
 
@@ -95,18 +92,19 @@ def initStackdriverProfiling():
         googlecloudprofiler.start(service='emailservice', service_version='1.0.0', verbose=0, project_id=project_id)
       else:
         googlecloudprofiler.start(service='emailservice', service_version='1.0.0', verbose=0)
-      logger.info("Successfully started Stackdriver Profiler.")
+      # logger.info("Successfully started Stackdriver Profiler.")
       return
     except (BaseException) as exc:
-      logger.info("Unable to start Stackdriver Profiler Python agent. " + str(exc))
-      if (retry < 4):
-        logger.info("Sleeping %d to retry initializing Stackdriver Profiler"%(retry*10))
-        time.sleep (1)
-      else:
-        logger.warning("Could not initialize Stackdriver Profiler after retrying, giving up")
+        print(BaseException)
+      # logger.info("Unable to start Stackdriver Profiler Python agent. " + str(exc))
+      # if (retry < 4):
+      #   logger.info("Sleeping %d to retry initializing Stackdriver Profiler"%(retry*10))
+      #   time.sleep (1)
+      # else:
+      #   logger.warning("Could not initialize Stackdriver Profiler after retrying, giving up")
   return
 
 
 if __name__ == "__main__":
-    logger.info('starting the emailservice.')
+    # logger.info('starting the emailservice.')
     serve()
