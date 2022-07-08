@@ -380,10 +380,10 @@ spec:
       - name: server
         image: europe-north1-docker.pkg.dev/ti-dictionary/transparency-information-dictionary/tid-demonstrator-emailservice:latest
         ports:
-        - containerPort: 8000
+        - containerPort: 8080
         env:
         - name: EMAIL_SERVICE_PORT
-          value: "8000"
+          value: "8080"
         - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
           value: "http://otelcollector:4317"
         - name: OTEL_RESOURCE_ATTRIBUTES
@@ -391,11 +391,11 @@ spec:
         readinessProbe:
           periodSeconds: 5
           exec:
-            command: ["/bin/grpc_health_probe", "-addr=:8000"]
+            command: ["/bin/grpc_health_probe", "-addr=:8080"]
         livenessProbe:
           periodSeconds: 5
           exec:
-            command: ["/bin/grpc_health_probe", "-addr=:8000"]
+            command: ["/bin/grpc_health_probe", "-addr=:8080"]
         resources:
           requests:
             cpu: 100m
@@ -414,8 +414,8 @@ spec:
     app: emailservice
   ports:
   - name: grpc
-    port: 8000
-    targetPort: 8000
+    port: 8080
+    targetPort: 8080
 ---
 apiVersion: apps/v1
 kind: Deployment
