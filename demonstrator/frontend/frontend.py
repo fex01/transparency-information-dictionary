@@ -1,7 +1,7 @@
 import os
 import datetime
 import traceback
-import flask-healthz
+from flask_healthz import healthz
 import grpc
 import demo_pb2_grpc, demo_pb2
 from flask import Flask, request, render_template
