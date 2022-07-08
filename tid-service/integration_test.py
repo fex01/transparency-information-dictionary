@@ -37,6 +37,10 @@ email_channel = grpc.insecure_channel(
 )
 email_server = demo_pb2_grpc.EmailStub(email_channel)
 
+frontend_host = os.getenv("FRONTEND_HOST", "localhost")
+frontend_port = os.getenv("FRONTEND_PORT", "5000")
+frontend = "http://" + frontend_host + ":" + frontend_port
+
 
 def test_01_email_service():
     email_valide = demo_pb2.EmailRequest(
@@ -97,15 +101,15 @@ def test_04_courier_service():
 
 
 def test_05_frontend():
-    homepage_html = urlopen("http://localhost:5000").read().decode("utf-8")
+    homepage_html = urlopen(frontend).read().decode("utf-8")
     assert "<title>Transparency Tracing Demo</title>" in homepage_html
 
 def test_06_frontend_create_account():
     data = parse.urlencode({"create_account": "Create Account"}).encode()
-    homepage_html = urlopen("http://localhost:5000", data).read().decode("utf-8")
+    homepage_html = urlopen(frontend, data).read().decode("utf-8")
     assert "response code: SUCCESS" in homepage_html
 
 def test_07_frontend_courier_service():
     data = parse.urlencode({"request_courier": "Request Courier"}).encode()
-    homepage_html = urlopen("http://localhost:5000", data).read().decode("utf-8")
+    homepage_html = urlopen(frontend, data).read().decode("utf-8")
     assert "response: SUCCESS" in homepage_html
