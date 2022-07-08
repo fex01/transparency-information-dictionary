@@ -132,6 +132,7 @@ dmypy.json
 *_pb2*py
 !tid-service/api_v3/*
 !tid-service/gogoproto/*
+!tid-service/google/api/*
 !tid-service/protoc_gen_swagger/*
 !tid-service/collector_pb2*
 !tid-service/model_pb2*
