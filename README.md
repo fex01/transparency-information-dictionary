@@ -1,1 +1,2 @@
-# transparency-information-dictionary
+# Transparency Information Dictionary
+

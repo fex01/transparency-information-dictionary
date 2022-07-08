@@ -6,4 +6,3 @@ opentelemetry-distro==0.31b0
 opentelemetry-exporter-otlp-proto-grpc==1.11.1
 opentelemetry-instrumentation-flask==0.31b0
 pytest==7.1.2
-
