@@ -1,6 +1,6 @@
 # Transparency Information Dictionary
 
-[[TOC]]
+{:toc}
 
 ## Quick Start
 
