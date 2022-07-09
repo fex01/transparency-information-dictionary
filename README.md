@@ -13,7 +13,7 @@
 
 ### Docker
 
-For now it's enough to have a environment with git[↩](#a1), [Docker](https://www.docker.com) and `docker compose`[↩](#a2) to get started:
+For now it's enough to have an environment with git[↩](#a1), [Docker](https://www.docker.com) and `docker compose`[↩](#a2) to get started:
 
 - `git clone https://github.com/fex01/transparency-information-dictionary.git` clone the repository
 - `cd transparency-information-dictionary` move into the repos directory
