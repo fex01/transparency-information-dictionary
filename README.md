@@ -43,12 +43,14 @@ Hints why our Kubernetes deployment does not run as expected, especially after g
 
 ## Concepts
 
+[TI-Dictionary Architecture](https://github.com/fex01/transparency-information-dictionary/blob/main/images/ti-dictionary_architecture.png)
+
 ## Tools & Technology
 
 ## Thanks
 
 - To my project partner [Ronny Georgi](https://github.com/georgir20)
-- To [Juliano Costa](https://github.com/julianocosta89) and his repo [opentelemetry-microservice-demo](https://github.com/julianocosta89/opentelemetry-microservices-demo). His repository was a great help getting started with and on the way to understanding how tracing with OpenTelemetry works - and he personally answered many of our technical questions, even completely unrelated to tracing itself.
+- To [Juliano Costa](https://github.com/julianocosta89) and his repo [opentelemetry-microservice-demo](https://github.com/julianocosta89/opentelemetry-microservices-demo). His repository was a great help getting started with - and on the way to - understanding how tracing with OpenTelemetry works - and he personally answered many of our technical questions, even completely unrelated to tracing itself.
 
 ## Sources
 
