@@ -28,6 +28,9 @@ For now it's enough to have an environment with git[↩](#a1), [Docker](https://
 
 ## Thanks
 
+- To my project partner @georgir20
+- To @julianocosta89 and his repo [opentelemetry-microservice-demo](https://github.com/julianocosta89/opentelemetry-microservices-demo). His repository was a great help getting started with and on the way to understanding how tracing with OpenTelemetry works - and he personally answered many of our technical questions, even completely unrelated to tracing itself.
+
 ## Sources
 
 ## Footnotes
