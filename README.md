@@ -1,15 +1,19 @@
 # Transparency Information Dictionary
 
-- [Quick Start](#quick-start)
+- [Spin Up](#spin-up)
   - [Docker](#docker)
   - [Kubernetes](#kubernetes)
+- [Use](#use)
+  - [Enrich Services With Transparency Information](#enrich-services-with-transparency-information)
+  - [Test to Generate Traces](#test-to-generate-traces)
+  - [Collect Transparency Information From Traces](#collect-transparency-information-from-traces)
 - [Concepts](#concepts)
 - [Tools & Technology](#tools--technology)
 - [Thanks](#thanks)
 - [Sources](#sources)
 - [Footnotes](#footnotes)
 
-## Quick Start
+## Spin Up
 
 ### Docker
 
@@ -28,6 +32,14 @@ The images are provided at `europe-north1-docker.pkg.dev/ti-dictionary/transpare
 - inter-pod communication: Communication to / from jaeger OpenTelemetry Collector, Jaeger backend, flask Frontend and our tid-service seem to work - but for reasons not understood the communication between our demonstrators gRPC service seems not to work.
 
 Hints why our Kubernetes deployment does not run as expected, especially after going trough all the work of understanding how to build, register and publish images in the cloud and trying to understand the differences between a docker compose deploy and Kubernetes would be highly appreciated...
+
+## Use
+
+### Enrich Services With Transparency Information
+
+### Test to Generate Traces
+
+### Collect Transparency Information From Traces
 
 ## Concepts
 
