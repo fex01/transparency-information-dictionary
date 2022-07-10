@@ -43,7 +43,7 @@ Hints why our Kubernetes deployment does not run as expected, especially after g
 
 ## Concepts
 
-[TI-Dictionary Architecture](https://github.com/fex01/transparency-information-dictionary/blob/main/images/ti-dictionary_architecture.png)
+![TI-Dictionary Architecture](https://github.com/fex01/transparency-information-dictionary/blob/main/images/ti-dictionary_architecture.png)
 
 ## Tools & Technology
 
