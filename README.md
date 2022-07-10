@@ -17,7 +17,7 @@
 
 ### Docker
 
-For now it's enough to have an environment with git[↩](#a1), [Docker](https://www.docker.com) and `docker compose`[↩](#a2) to get started:
+For now it's enough to have an environment with git<sup id="a1">[1](#f1)</sup>, [Docker](https://www.docker.com) and `docker compose`<sup id="a2">[2](#f2)</sup> to get started:
 
 - `git clone https://github.com/fex01/transparency-information-dictionary.git` clone the repository
 - `cd transparency-information-dictionary` move into the repos directory
@@ -54,5 +54,5 @@ Hints why our Kubernetes deployment does not run as expected, especially after g
 
 ## Footnotes
 
-<b id="f1">1</b>: Git as locally installed tool, not a platform like GitHub. [git-scm.com](https://git-scm.com) might be a good starting point to understand the difference und to find an installation for your OS.  
-<b id="f1">2</b>: The newer v2 of [`docker-compose`](https://docs.docker.com/compose/) - now without the hyphen `-`. If you are using a current version of Docker Desktop than you are good to go. On Linux you might have to update manually. Relevant, because the old command `docker-compose` might have trouble with the environment variables or other untested side effects.
+<b id="f1">1</b>: Git as locally installed tool, not a platform like GitHub. [git-scm.com](https://git-scm.com) might be a good starting point to understand the difference und to find an installation for your OS. [↩](#a1)  
+<b id="f1">2</b>: The newer v2 of [`docker-compose`](https://docs.docker.com/compose/) - now without the hyphen `-`. If you are using a current version of Docker Desktop than you are good to go. On Linux you might have to update manually. Relevant, because the old command `docker-compose` might have trouble with the environment variables or other untested side effects. [↩](#a2)
