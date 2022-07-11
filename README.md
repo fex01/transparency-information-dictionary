@@ -5,8 +5,16 @@
   - [Kubernetes](#kubernetes)
 - [Use](#use)
   - [Enrich Services With Transparency Information](#enrich-services-with-transparency-information)
+    - [1) Request Tags for Transparency Information](#1-request-tags-for-transparency-information)
+    - [2) Annotate Services With Transparency Information](#2-annotate-services-with-transparency-information)
   - [Test to Generate Traces](#test-to-generate-traces)
+    - [3) Trigger Integration Test With Activated Tracing](#3-trigger-integration-test-with-activated-tracing)
+    - [4) Spans Are Collected And Forwarded as Traces to the Jaeger Backend](#4-spans-are-collected-and-forwarded-as-traces-to-the-jaeger-backend)
   - [Collect Transparency Information From Traces](#collect-transparency-information-from-traces)
+    - [5) Request Formatted Transparency Information From Traces](#5-request-formatted-transparency-information-from-traces)
+    - [6) Jaeger Backend Gets Queried Regarding All Services and Traces](#6-jaeger-backend-gets-queried-regarding-all-services-and-traces)
+    - [7) Returns Collected Traces as JSON](#7-returns-collected-traces-as-json)
+    - [8) Filters Traces for Tags and Transforms Them Into TIL Objects](#8-filters-traces-for-tags-and-transforms-them-into-til-objects)
 - [Concepts](#concepts)
 - [Tools & Technology](#tools--technology)
 - [Thanks](#thanks)
@@ -41,19 +49,24 @@ Your containers are up and running - so how to make use of the Transparency Info
 
 ### Enrich Services With Transparency Information
 
-To get service level detailed transparency information via tracing the services code has to be annotated with said transparency information. 
+To get service level detailed transparency information via tracing the services code has to be annotated with said transparency information.
 We aim to avoid a wild mixup of different interpretations and expressions of free form transparency information, which would make it hard to compare and aggregate information from different services. Our dictionary is a tool to provide company wide “sanctioned” options - expressed as tags.
 
 Ideally the interaction with the tid-service to retrieve tag options and annotate the service in development would be supported with an IDE plugin - but that might be it’s own further Privacy Engineering project ;-)
 
 So for now let’s have a look at how to do this manually:
 
-#### 1) Get Tags for Transparency Information
+#### 1) Request Tags for Transparency Information
 
-To understand the interaction with the tid-service let’s have a look at an excerpt of the tid-service protobuf file:
+To understand the interaction with the tid-service let’s have a look at an excerpt of the [protobuf](https://developers.google.com/protocol-buffers/) file defining the service request for Data Disclosed properties:
 
 ```proto
+# protobufs/tid.proto
+
 service TIDict {
+    // get lists of options defined in the company dictionary for Data Disclosed properties
+    // DataDisclosedRequest.value = a value of enum DataDisclosedType
+    // returns DataDisclosedResponse.list = [property_1 .. property_n]
     rpc GetDataDisclosedOfType(DataDisclosedRequest) returns (DataDisclosedResponse);
     …
 }
@@ -75,11 +88,73 @@ enum DataDisclosedType {
 }
 ```
 
-#### 2) Annotating Services with transparency Information
+Let's have a look at how to query this function and at an example output:
+
+```python
+# tid-service/tid_test.py
+...
+def test_02_category(self):
+    # request the list of possible Data Disclosed Categories
+    response = tid_server.GetDataDisclosedOfType(
+        tid_pb2.DataDisclosedRequest(value=tid_pb2.CATEGORY), None
+    )
+    print(response.list)
+    assert response.list[0].category.id == "C01"
+...
+```
+
+```json
+// abbreviated output for tid-service/tid_test.py/test_02_category()
+[
+  category {
+    id: "C01"
+    value: "E-mail address"
+  }, 
+  ...
+  category {
+    id: "C11"
+    value: "Credit score"
+  }
+]
+```
+
+Let's assume we have to annotate an email-service - so picking tag `C01` for category might be a good start. Do the same for other Data Disclosed properties - and other supported [TIL](https://transparency-information-language.github.io/schema/index.html) objects to assemble the necessary tags for [step 2](#2-annotating-services-with-transparency-information).
+
+#### 2) Annotate Services With Transparency Information
+
+Add tags as tracing attributes to the code - here an example of out demonstrators email service:
+
+```python
+# demonstrator/emailservice/email_service.py
+...
+class EmailService(demo_pb2_grpc.EmailServicer):
+  ...
+  def Send(self, request, context):
+    # get the current span to add attributes to tracing
+    span = trace.get_current_span()
+    # each TIL objects needs it's own line
+    # attribute identifier (first string) needs to start with "ti_", the rest needs to be unique for 
+    span.set_attribute("ti_c01", ["C01", "R02", "COA7_C1", "ST11"])
+    span.set_attribute("ti_c07", ["C07", "COA7_C1", "ST11"])
+    span.set_attribute("ti_tct01", ["TCT01"])
+    ...
+```
 
 ### Test to Generate Traces
 
+#### 3) Trigger Integration Test With Activated Tracing
+
+#### 4) Spans Are Collected And Forwarded as Traces to the Jaeger Backend
+
 ### Collect Transparency Information From Traces
+
+#### 5) Request Formatted Transparency Information From Traces
+
+#### 6) Jaeger Backend Gets Queried Regarding All Services and Traces
+
+#### 7) Returns Collected Traces as JSON
+
+#### 8) Filters Traces for Tags and Transforms Them Into TIL Objects
 
 ## Concepts
 

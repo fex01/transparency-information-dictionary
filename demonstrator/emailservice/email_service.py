@@ -35,9 +35,14 @@ class EmailService(demo_pb2_grpc.EmailServicer):
             status=health_pb2.HealthCheckResponse.UNIMPLEMENTED)
 
     def Send(self, request, context):
+        # get the current span to add attributes to tracing
         span = trace.get_current_span()
+        # each TIL objects needs it's own line
+        # attribute identifier (first string) needs to start with "ti_", the rest needs to be unique for this span
+        # ti_c01: Data Disclosed object for category C01: E-mail address
         span.set_attribute("ti_c01", ["C01", "R02", "COA7_C1", "ST11"])
         span.set_attribute("ti_c07", ["C07", "COA7_C1", "ST11"])
+        #
         span.set_attribute("ti_tct01", ["TCT01"])
 
         # logger.info('A request to send an email to {} has been received.'.format(request.recipient))

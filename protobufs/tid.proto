@@ -4,7 +4,11 @@
 syntax = "proto3";
 
 service TIDict {
+    // get lists of options defined in the company dictionary for Data Disclosed properties
+    // DataDisclosedRequest.value = a value of enum DataDisclosedType
+    // returns DataDisclosedResponse.list = [property_1 .. property_n]
     rpc GetDataDisclosedOfType(DataDisclosedRequest) returns (DataDisclosedResponse);
+    
     rpc GetThirdCountryTransfers(TCTRequest) returns (TCTResponse);
     rpc GetChangesOfPurpose(COPRequest) returns (COPResponse);
     rpc GetTransparencyInformationFromTagList(TagListRequest) returns (TagListResponse);

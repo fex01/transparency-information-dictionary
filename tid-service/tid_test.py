@@ -22,6 +22,7 @@ class TestTIDictService(unittest.TestCase):
         assert response.list[0].null_value == tid_pb2.NULL_VALUE
 
     def test_02_category(self):
+        # request the list of possible Data Disclosed Categories
         response = tid_server.GetDataDisclosedOfType(
             tid_pb2.DataDisclosedRequest(value=tid_pb2.CATEGORY), None
         )
