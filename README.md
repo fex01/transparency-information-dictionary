@@ -103,7 +103,7 @@ def test_02_category(self):
 ...
 ```
 
-```json
+```
 // abbreviated output for tid-service/tid_test.py/test_02_category()
 [
   category {
