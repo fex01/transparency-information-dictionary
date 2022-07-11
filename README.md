@@ -35,15 +35,26 @@ Hints why our Kubernetes deployment does not run as expected, especially after g
 
 ## Use
 
+Your containers are up and running - so how to make use of the Transparency Information Dictionary? In the following diagram you can see how our dictionary service, the demonstrator services, the OpenTelemetry Collector and the Jaeger backend interact with each other - with numbered steps 1 to 8 to explain the flow. So lets go through them.
+
+![TI-Dictionary Architecture](https://github.com/fex01/transparency-information-dictionary/blob/main/images/ti-dictionary_architecture.png)
+
 ### Enrich Services With Transparency Information
+
+To get service level detailed transparency information via tracing the services code has to be annotated with said transparency information. To avoid
+
+- why tags
+- further development tool support for dict interaction (plugin)
+
+#### 1) Get Tags for Transparency Information
+
+#### 2) Annotating Services with transparency Information
 
 ### Test to Generate Traces
 
 ### Collect Transparency Information From Traces
 
 ## Concepts
-
-![TI-Dictionary Architecture](https://github.com/fex01/transparency-information-dictionary/blob/main/images/ti-dictionary_architecture.png)
 
 ## Tools & Technology
 
