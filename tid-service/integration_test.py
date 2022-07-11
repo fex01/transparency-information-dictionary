@@ -1,16 +1,17 @@
 # run with `opentelemetry-instrument pytest integration_test.py` to generate trace
 import datetime
 import os
-import urllib
-from urllib import request, parse
+from urllib import parse
 from urllib.request import urlopen
-import grpc
 
-import demo_pb2_grpc, demo_pb2
+import grpc
 from opentelemetry import trace
 from opentelemetry.exporter.otlp.proto.grpc.trace_exporter import OTLPSpanExporter
 from opentelemetry.sdk.trace import TracerProvider
 from opentelemetry.sdk.trace.export import (BatchSpanProcessor)
+
+import demo_pb2
+import demo_pb2_grpc
 
 tracer_provider = TracerProvider()
 trace.set_tracer_provider(tracer_provider)
