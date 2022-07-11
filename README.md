@@ -103,7 +103,7 @@ def test_02_category(self):
 ...
 ```
 
-```
+```txt
 // abbreviated output for tid-service/tid_test.py/test_02_category()
 [
   category {
@@ -186,6 +186,7 @@ To collect traces with [OpenTelemetry](https://opentelemetry.io) and [Jaeger](ht
 Make sure that you expose jaegers gRPC query port to enable [trace querying for our tid-service](#6-jaeger-backend-gets-queried-regarding-all-services-and-traces).
 
 You can see the traces generated in [step 3](#3-trigger-integration-test-with-activated-tracing) via the jaeger backend - if you did use the provided docker compose file the backend can be found at <http://localhost:16686>.
+
 The following screenshot is a trace covering multiple services. You can fin the familiar tag lists mentioned in [step 2](#2-annotate-services-with-transparency-information) in the expanded tag section for span *emailservice*:
 
 ![trace with tag section for span emailservice expanded](https://github.com/fex01/transparency-information-dictionary/blob/main/images/20220711_trace_expanded.png)
