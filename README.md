@@ -175,6 +175,11 @@ def test_06_frontend_create_account():
 The test case triggers the service *frontend* to send a request for creating a new user account to service *accountservice* and asserts a successful response.
 As you can see - the test tool and the test definition have no connection to tracing nor tid-specific annotations.
 
+For this demonstration just run *tid-service/integration_test.py* to generate traces. Just connect to the tid-service container (Docker or pod (Kubernetes) (the following commands are for use with Docker containers, the Kubernetes commands are very similar):
+
+- `docker exec -it transparency_tracing-tidservice-1 bash` to connect to the tid-service container and use its bash shell
+- `pytest integration_test.py` to run the integration test
+
 #### 4) Spans Are Collected And Forwarded as Traces to the Jaeger Backend
 
 To collect traces with [OpenTelemetry](https://opentelemetry.io) and [Jaeger](https://www.jaegertracing.io) we are using an OpenTelemetry Collector (service *otelcollector*) and the [*jaegertracing/opentelemetry-all-in-one*](https://www.jaegertracing.io/docs/1.35/getting-started/) image as tracing backend.
