@@ -132,19 +132,53 @@ class EmailService(demo_pb2_grpc.EmailServicer):
   def Send(self, request, context):
     # get the current span to add attributes to tracing
     span = trace.get_current_span()
-    # each TIL objects needs it's own line
-    # attribute identifier (first string) needs to start with "ti_", the rest needs to be unique for 
+    # each TIL objects needs its own line
+    # attribute identifier (first string) needs to start with "ti_", the rest needs to be unique for this span
+    # ti_c01: Data Disclosed object for category C01: E-mail address
     span.set_attribute("ti_c01", ["C01", "R02", "COA7_C1", "ST11"])
     span.set_attribute("ti_c07", ["C07", "COA7_C1", "ST11"])
     span.set_attribute("ti_tct01", ["TCT01"])
     ...
 ```
 
+Having done that with all your services you are now good to go to reap the benefits. [Test](#test-to-generate-traces) your application, use standard test strategies to ensure service coverage and generate ex-ante [formatted Transparency Information](#collect-transparency-information-from-traces) for use with further tools such as [TILT](#sources).
+
 ### Test to Generate Traces
+
+To get detailed service level transparency information via tracing it has to be ensured that each service [enriched with transparency information](#enrich-services-with-transparency-information) gets covered by service calls. Since service / component coverage is part of every integration test strategy - just run your (hopefully existing) integration test:
 
 #### 3) Trigger Integration Test With Activated Tracing
 
+Ensure that you are running your services with activated tracing and use your existing tools for testing (and test automation) to make service calls.
+For our demonstrator tracing is baked in into the Dockerfile:
+
+```dockerfile
+# demonstrator/emailservice/Dockerfile
+...
+ENTRYPOINT [ "opentelemetry-instrument", "python", "email_service.py" ]
+```
+
+To run the container without tracing you would just delete the first list entry *"opentelemetry-instrument"* from *ENTRYPOINT* before building the image.
+
+As testing tool we are using [pytest](https://docs.pytest.org/en/7.1.x/), an example for a test case would be the following excerpt from the integration test:
+
+```python
+# tid-service/integration_test.py
+...
+def test_06_frontend_create_account():
+  data = parse.urlencode({"create_account": "Create Account"}).encode()
+  homepage_html = urlopen(frontend, data).read().decode("utf-8")
+  assert "response code: SUCCESS" in homepage_html
+...
+```
+
+The test case triggers the service *frontend* to send a request for creating a new user account to service *accountservice* and asserts a successful response.
+As you can see - the test tool and the test definition have no connection to tracing nor tid-specific annotations.
+
 #### 4) Spans Are Collected And Forwarded as Traces to the Jaeger Backend
+
+To collect traces with [OpenTelemetry](https://opentelemetry.io) and [Jaeger](https://www.jaegertracing.io) we are using an OpenTelemetry Collector (service *otelcollector*) and the [*jaegertracing/opentelemetry-all-in-one*](https://www.jaegertracing.io/docs/1.35/getting-started/) image as tracing backend.
+Make sure that you expose jaegers gRPC query port to enable [trace querying for our tid-service](#6-jaeger-backend-gets-queried-regarding-all-services-and-traces).
 
 ### Collect Transparency Information From Traces
 
