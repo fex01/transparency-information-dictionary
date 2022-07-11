@@ -150,7 +150,7 @@ To get detailed service level transparency information via tracing it has to be 
 #### 3) Trigger Integration Test With Activated Tracing
 
 Ensure that you are running your services with activated tracing and use your existing tools for testing (and test automation) to make service calls.
-For our demonstrator tracing is baked in into the Dockerfile:
+For our demonstrator tracing is baked into the Dockerfile:
 
 ```dockerfile
 # demonstrator/emailservice/Dockerfile
