@@ -41,12 +41,39 @@ Your containers are up and running - so how to make use of the Transparency Info
 
 ### Enrich Services With Transparency Information
 
-To get service level detailed transparency information via tracing the services code has to be annotated with said transparency information. To avoid
+To get service level detailed transparency information via tracing the services code has to be annotated with said transparency information. 
+We aim to avoid a wild mixup of different interpretations and expressions of free form transparency information, which would make it hard to compare and aggregate information from different services. Our dictionary is a tool to provide company wide “sanctioned” options - expressed as tags.
 
-- why tags
-- further development tool support for dict interaction (plugin)
+Ideally the interaction with the tid-service to retrieve tag options and annotate the service in development would be supported with an IDE plugin - but that might be it’s own further Privacy Engineering project ;-)
+
+So for now let’s have a look at how to do this manually:
 
 #### 1) Get Tags for Transparency Information
+
+To understand the interaction with the tid-service let’s have a look at an excerpt of the tid-service protobuf file:
+
+```proto
+service TIDict {
+    rpc GetDataDisclosedOfType(DataDisclosedRequest) returns (DataDisclosedResponse);
+    …
+}
+
+message DataDisclosedRequest {
+    DataDisclosedType value = 1;
+}
+
+message DataDisclosedResponse {
+    repeated DataDisclosedEntry list = 1;
+}
+
+enum DataDisclosedType {
+    CATEGORY = 0;
+    PURPOSE = 1;
+    LEGAL_BASE = 2;
+    RECIPIENT = 3;
+    STORAGE = 4;
+}
+```
 
 #### 2) Annotating Services with transparency Information
 

@@ -3,7 +3,6 @@
 // `python -m grpc_tools.protoc -I ../protobufs --python_out=. --grpc_python_out=. ../protobufs/tid.proto`
 syntax = "proto3";
 
-/// gib alle verfügbaren, kein Search Interface
 service TIDict {
     rpc GetDataDisclosedOfType(DataDisclosedRequest) returns (DataDisclosedResponse);
     rpc GetThirdCountryTransfers(TCTRequest) returns (TCTResponse);
