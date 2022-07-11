@@ -105,10 +105,12 @@ def test_05_frontend():
     homepage_html = urlopen(frontend).read().decode("utf-8")
     assert "<title>Transparency Tracing Demo</title>" in homepage_html
 
+
 def test_06_frontend_create_account():
     data = parse.urlencode({"create_account": "Create Account"}).encode()
     homepage_html = urlopen(frontend, data).read().decode("utf-8")
     assert "response code: SUCCESS" in homepage_html
+
 
 def test_07_frontend_courier_service():
     data = parse.urlencode({"request_courier": "Request Courier"}).encode()
