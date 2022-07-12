@@ -2,7 +2,9 @@
 
 some introduction test
 
-Head to section [Spin Up](#spin-up) and [Use](#use) to spin up the demonstrator yourself and to go step by step through the process of how to use the Transparency Information Dictionary:
+Head to section [Spin Up](#spin-up) and [Use](#use) to spin up the demonstrator yourself and to go step by step through the process of how to use the Transparency Information Dictionary.
+
+Head to section [Tools & Technologies](#tools--technologies) to find futher information about the tools and technologies used in this project.
 
 - [Spin Up](#spin-up)
   - [Docker](#docker)
