@@ -192,7 +192,7 @@ You can see the traces generated in [step 3](#3-trigger-integration-test-with-ac
 The following screenshot is a trace covering multiple services. You can fin the familiar tag lists mentioned in [step 2](#2-annotate-services-with-transparency-information) in the expanded tag section for span *emailservice*:
 
 ![trace with tag section for span emailservice expanded](https://github.com/fex01/transparency-information-dictionary/blob/main/images/20220711_trace_expanded.png)
-
+diffrence between purpose 
 ### Collect Transparency Information From Traces
 
 Now how to go forward from transparency information encoded as tags in traces on the jaeger backend? Thats where the last function offered by our *tid-service* comes into play:
@@ -212,6 +212,15 @@ We are not providing any tool assistant for filling / adapting the underlying di
 What we do, in the docker compose setup, is mounting the repos dictionary as a bind mount into the *tid-service* container. As such everybody with access to the host running the container can use whatever tools are preferred to edit the JSON file *dictionary/TransparencyInformationDictionary.json*. This is possible during the runtime of the container, the service will incorporate changes to said file on the fly.
 
 ## Tools & Technology
+
+- Python gRPC microservice - have a look at [Real Python](https://realpython.com/python-microservices-grpc/#docker) for a great introduction
+- [OpenTelemtry](https://opentelemetry.io)
+- [Jaeger Tracing](https://www.jaegertracing.io)
+- [Docker](https://www.docker.com)
+- Google Cloud Services
+	- [Google Cloud Build](https://cloud.google.com/build)
+	- [Google Cloud Artifact Registry](https://cloud.google.com/artifact-registry)
+	- [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine)
 
 ## Thanks
 
