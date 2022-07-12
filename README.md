@@ -207,7 +207,7 @@ Now how to go forward from transparency information encoded as tags in traces on
 
 ### Adding Transparency Information Values to the Underlying Dictionary
 
-We are not providing any tool assistant for filling / adapting the underlying dictionary - that might, including a concept to restrict dictionary adaption to specific access conditions, be it's own further project.
+We are not providing any tool assistant for filling / adapting the underlying dictionary - that might, including a concept to restrict dictionary adaption to specific access conditions and expanding the service to additional [TIL](#sources) properties, be it's own further project.
 
 What we do, in the docker compose setup, is mounting the repos dictionary as a bind mount into the *tid-service* container. As such everybody with access to the host running the container can use whatever tools are preferred to edit the JSON file *dictionary/TransparencyInformationDictionary.json*. This is possible during the runtime of the container, the service will incorporate changes to said file on the fly.
 
