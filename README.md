@@ -15,7 +15,7 @@
     - [6) Jaeger Backend Gets Queried Regarding All Services and Traces](#6-jaeger-backend-gets-queried-regarding-all-services-and-traces)
     - [7) Returns Collected Traces as JSON](#7-returns-collected-traces-as-json)
     - [8) Filters Traces for Tags and Transforms Them Into TIL Objects](#8-filters-traces-for-tags-and-transforms-them-into-til-objects)
-- [Concepts](#concepts)
+  - [Adding Transparency Information Values to the Underlying Dictionary](#adding-transparency-information-values-to-the-underlying-dictionary)
 - [Tools & Technology](#tools--technology)
 - [Thanks](#thanks)
 - [Sources](#sources)
@@ -180,6 +180,8 @@ For this demonstration just run *tid-service/integration_test.py* to generate tr
 - `docker exec -it transparency_tracing-tidservice-1 bash` to connect to the tid-service container and use its bash shell
 - `pytest integration_test.py` to run the integration test
 
+As an alternative you can also open the minimal webpage provided by the frontend service to manually trigger service calls. For the docker compose setup the frontend can be found at <http://localhost:5000/>.
+
 #### 4) Spans Are Collected And Forwarded as Traces to the Jaeger Backend
 
 To collect traces with [OpenTelemetry](https://opentelemetry.io) and [Jaeger](https://www.jaegertracing.io) we are using an OpenTelemetry Collector (service *otelcollector*) and the [*jaegertracing/opentelemetry-all-in-one*](https://www.jaegertracing.io/docs/1.35/getting-started/) image as tracing backend.
@@ -193,6 +195,8 @@ The following screenshot is a trace covering multiple services. You can fin the 
 
 ### Collect Transparency Information From Traces
 
+Now how to go forward from transparency information encoded as tags in traces on the jaeger backend? Thats where the last function offered by our *tid-service* comes into play:
+
 #### 5) Request Formatted Transparency Information From Traces
 
 #### 6) Jaeger Backend Gets Queried Regarding All Services and Traces
@@ -201,7 +205,11 @@ The following screenshot is a trace covering multiple services. You can fin the 
 
 #### 8) Filters Traces for Tags and Transforms Them Into TIL Objects
 
-## Concepts
+### Adding Transparency Information Values to the Underlying Dictionary
+
+We are not providing any tool assistant for filling / adapting the underlying dictionary - that might, including a concept to restrict dictionary adaption to specific access conditions, be it's own further project.
+
+What we do, in the docker compose setup, is mounting the repos dictionary as a bind mount into the *tid-service* container. As such everybody with access to the host running the container can use whatever tools are preferred to edit the JSON file *dictionary/TransparencyInformationDictionary.json*. This is possible during the runtime of the container, the service will incorporate changes to said file on the fly.
 
 ## Tools & Technology
 
