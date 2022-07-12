@@ -227,8 +227,6 @@ What we do, in the docker compose setup, is mounting the repos dictionary as a b
 - To my project partner [Ronny Georgi](https://github.com/georgir20)
 - To [Juliano Costa](https://github.com/julianocosta89) and his repo [opentelemetry-microservice-demo](https://github.com/julianocosta89/opentelemetry-microservices-demo). His repository was a great help getting started with - and on the way to - understanding how tracing with OpenTelemetry works - and he personally answered many of our technical questions, even completely unrelated to tracing itself.
 
-## Sources
-
 ## Footnotes
 
 <b id="f1">1</b>: Git as locally installed tool, not a platform like GitHub. [git-scm.com](https://git-scm.com) might be a good starting point to understand the difference und to find an installation for your OS. [↩](#a1)  
