@@ -16,9 +16,8 @@
     - [7) Returns Collected Traces as JSON](#7-returns-collected-traces-as-json)
     - [8) Filters Traces for Tags and Transforms Them Into TIL Objects](#8-filters-traces-for-tags-and-transforms-them-into-til-objects)
   - [Adding Transparency Information Values to the Underlying Dictionary](#adding-transparency-information-values-to-the-underlying-dictionary)
-- [Tools & Technology](#tools--technology)
+- [Tools & Technologies](#tools--technologies)
 - [Thanks](#thanks)
-- [Sources](#sources)
 - [Footnotes](#footnotes)
 
 ## Spin Up
@@ -189,10 +188,10 @@ Make sure that you expose jaegers gRPC query port to enable [trace querying for 
 
 You can see the traces generated in [step 3](#3-trigger-integration-test-with-activated-tracing) via the jaeger backend - if you did use the provided docker compose file the backend can be found at <http://localhost:16686>.
 
-The following screenshot is a trace covering multiple services. You can fin the familiar tag lists mentioned in [step 2](#2-annotate-services-with-transparency-information) in the expanded tag section for span *emailservice*:
+The following screenshot is a trace covering multiple services. You can find the familiar tag lists mentioned in [step 2](#2-annotate-services-with-transparency-information) in the expanded tag section for span *emailservice*:
 
 ![trace with tag section for span emailservice expanded](https://github.com/fex01/transparency-information-dictionary/blob/main/images/20220711_trace_expanded.png)
-diffrence between purpose 
+
 ### Collect Transparency Information From Traces
 
 Now how to go forward from transparency information encoded as tags in traces on the jaeger backend? Thats where the last function offered by our *tid-service* comes into play:
@@ -207,12 +206,13 @@ Now how to go forward from transparency information encoded as tags in traces on
 
 ### Adding Transparency Information Values to the Underlying Dictionary
 
-We are not providing any tool assistant for filling / adapting the underlying dictionary - that might, including a concept to restrict dictionary adaption to specific access conditions and expanding the service to additional [TIL](#sources) properties, be it's own further project.
+We are not providing any tool assistant for filling / adapting the underlying dictionary - that might, including a concept to restrict dictionary adaption to specific access conditions and expanding the service to additional [TIL](#tools--technologies) properties, be it's own further project.
 
 What we do, in the docker compose setup, is mounting the repos dictionary as a bind mount into the *tid-service* container. As such everybody with access to the host running the container can use whatever tools are preferred to edit the JSON file *dictionary/TransparencyInformationDictionary.json*. This is possible during the runtime of the container, the service will incorporate changes to said file on the fly.
 
-## Tools & Technology
+## Tools & Technologies
 
+- [TIL Root Schema](https://transparency-information-language.github.io/schema/index.html)
 - Python gRPC microservice - have a look at [Real Python](https://realpython.com/python-microservices-grpc/#docker) for a great introduction
 - [OpenTelemtry](https://opentelemetry.io)
 - [Jaeger Tracing](https://www.jaegertracing.io)
