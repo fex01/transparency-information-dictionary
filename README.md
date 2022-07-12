@@ -1,5 +1,9 @@
 # Transparency Information Dictionary
 
+some introduction test
+
+Head to section [Spin Up](#spin-up) and [Use](#use) to spin up the demonstrator yourself and to go step by step through the process of how to use the Transparency Information Dictionary:
+
 - [Spin Up](#spin-up)
   - [Docker](#docker)
   - [Kubernetes](#kubernetes)
