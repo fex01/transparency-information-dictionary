@@ -1,10 +1,18 @@
 # Transparency Information Dictionary
 
-some introduction test
+*The Transparency Information Dictionary was developed as part of the module Privacy Engineering from Dr. Frank Pallas at Technical University Berlin during the Summer Semester 2022.*
+
+Transparency - one of the key concepts of Data Protection as defined by the GDPR is a major challenge for fast-paced, agile software development as summarized under concepts such as DevOps. One common way DevOps centred approaches mitigate challenges is to develop and integrate ready-to-use tools for specific problems, automating where possible to speed up development time.
+
+The Transparency Information Dictionary is an approach to bring these qualities to the domain of Transparency by 1) developing a concept to enrich existing Open Source tracing solutions for performance monitoring with service-level transparency information to generate and collect dynamic per-request transparency information traces, 2) combining this with methods from the area of quality assurance we level testing to ensure coverage and complete, highly detailed ex-ante transparency information, 3) which is to be structured in the [Transparency Information Language](#tools--technologies) to enable the use of existing and to be developed tools to aggregate, manage and present transparency information.
+
+Such offering service-providers a tool that decreases the need for overly broad and vague privacy policies.
+
+## Table of Content
 
 Head to section [Spin Up](#spin-up) and [Use](#use) to spin up the demonstrator yourself and to go step by step through the process of how to use the Transparency Information Dictionary.
 
-Head to section [Tools & Technologies](#tools--technologies) to find futher information about the tools and technologies used in this project.
+Head to section [Tools & Technologies](#tools--technologies) to find further information about the tools and technologies used in this project.
 
 - [Spin Up](#spin-up)
   - [Docker](#docker)
@@ -39,7 +47,7 @@ For now it's enough to have an environment with git<sup id="a1">[1](#f1)</sup>, 
 
 ### Kubernetes
 
-The images are provided at `europe-north1-docker.pkg.dev/ti-dictionary/transparency-information-dictionary/<service-name>` via the [Google Artifact Registry](https://cloud.google.com/artifact-registry) (complete with automated builds via this repository). A kubernetes manifest was created and is part of this repository - but the author could not get the deployment to work via the [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine/). The main problems seem to be:
+The images are provided at `europe-north1-docker.pkg.dev/ti-dictionary/transparency-information-dictionary/<service-name>` via the [Google Artifact Registry](#tools--technologies) (complete with automated builds via this repository). A kubernetes manifest was created and is part of this repository - but the author could not get the deployment to work via the [Google Kubernetes Engine (GKE)](#tools--technologies). The main problems seem to be:
 
 - discover ready/live status for gRPC services: Our gRPC services support ready/live status via [grpc health probe](https://github.com/grpc-ecosystem/grpc-health-probe), which works fine for Docker Desktops local Kubernetes cluster, but does not seem to work with GKE.
 - inter-pod communication: Communication to / from jaeger OpenTelemetry Collector, Jaeger backend, flask Frontend and our tid-service seem to work - but for reasons not understood the communication between our demonstrators gRPC service seems not to work.
@@ -63,7 +71,7 @@ So for now let’s have a look at how to do this manually:
 
 #### 1) Request Tags for Transparency Information
 
-To understand the interaction with the tid-service let’s have a look at an excerpt of the [protobuf](https://developers.google.com/protocol-buffers/) file defining the service request for Data Disclosed properties:
+To understand the interaction with the tid-service let’s have a look at an excerpt of the [protobuf](#tools--technologies) file defining the service request for Data Disclosed properties:
 
 ```proto
 # protobufs/tid.proto
@@ -218,15 +226,16 @@ What we do, in the docker compose setup, is mounting the repos dictionary as a b
 
 ## Tools & Technologies
 
-- [TIL Root Schema](https://transparency-information-language.github.io/schema/index.html)
-- Python gRPC microservice - have a look at [Real Python](https://realpython.com/python-microservices-grpc/#docker) for a great introduction
-- [OpenTelemtry](https://opentelemetry.io)
+- [Transparency Information Language (TIL) Root Schema](https://transparency-information-language.github.io/schema/index.html) - defining a structured language to express transparency information
+- Python gRPC microservices - have a look at [Real Python](https://realpython.com/python-microservices-grpc/#docker) for a great introduction
+- [protocol buffers (protobufs)](https://developers.google.com/protocol-buffers/) - to define our gRPC microservices
+- [OpenTelemetry](https://opentelemetry.io)
 - [Jaeger Tracing](https://www.jaegertracing.io)
 - [Docker](https://www.docker.com)
 - Google Cloud Services
-	- [Google Cloud Build](https://cloud.google.com/build)
-	- [Google Cloud Artifact Registry](https://cloud.google.com/artifact-registry)
-	- [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine)
+  - [Google Cloud Build](https://cloud.google.com/build)
+  - [Google Cloud Artifact Registry](https://cloud.google.com/artifact-registry)
+  - [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine)
 
 ## Thanks
 
