@@ -24,17 +24,15 @@ Head to section [Tools & Technologies](#tools--technologies) to find further inf
   - [Test to Generate Traces](#test-to-generate-traces)
     - [3) Trigger Integration Test With Activated Tracing](#3-trigger-integration-test-with-activated-tracing)
     - [4) Spans Are Collected And Forwarded as Traces to the Jaeger Backend](#4-spans-are-collected-and-forwarded-as-traces-to-the-jaeger-backend)
-  - [Collect Transparency Information From Traces](#collect-transparency-information-from-traces)
-    - [5) Request Formatted Transparency Information From Traces](#5-request-formatted-transparency-information-from-traces)
-    - [6) Jaeger Backend Gets Queried Regarding All Services and Traces](#6-jaeger-backend-gets-queried-regarding-all-services-and-traces)
-    - [7) Returns Collected Traces as JSON](#7-returns-collected-traces-as-json)
-    - [8) Filters Traces for Tags and Transforms Them Into TIL Objects](#8-filters-traces-for-tags-and-transforms-them-into-til-objects)
+  - [5)-8) Collect Transparency Information From Traces](#5-8-collect-transparency-information-from-traces)(#8-filters-traces-for-tags-and-transforms-them-into-til-objects)
   - [Adding Transparency Information Values to the Underlying Dictionary](#adding-transparency-information-values-to-the-underlying-dictionary)
 - [Tools & Technologies](#tools--technologies)
 - [Thanks](#thanks)
 - [Footnotes](#footnotes)
 
 ## Spin Up
+
+The default deployment is the [docker compose deployment](#docker), all commands listed in [Use](#use) will assume the default deployment. But if you are familiar with Kubernetes deployments you will have no trouble translating them to their `kubectl` counterpart. Same will hold for expressions like *container* instead of *pod* and use of *localhost* addresses for said container.
 
 ### Docker
 
@@ -81,7 +79,7 @@ service TIDict {
     // DataDisclosedRequest.value = a value of enum DataDisclosedType
     // returns DataDisclosedResponse.list = [property_1 .. property_n]
     rpc GetDataDisclosedOfType(DataDisclosedRequest) returns (DataDisclosedResponse);
-    …
+    ...
 }
 
 message DataDisclosedRequest {
@@ -116,8 +114,13 @@ def test_02_category(self):
 ...
 ```
 
+If you want to run the test yourself you can either install the necessary requirements locally with `cd tid-service && pip install -r requirements.txt` - or just connect to the tid-service container `docker exec -it transparency_tracing-tidservice-1 bash` to then use  
+
+- `pytest -s tid_test.py::TestTIDictService::test_02_category` to run the test and print the output to the console
+  - do not overlook flag `-s` to actually show to output in the console
+
 ```txt
-// abbreviated output for tid-service/tid_test.py/test_02_category()
+// abbreviated output for tid_test.py::TestTIDictService::test_02_category
 [
   category {
     id: "C01"
@@ -130,6 +133,8 @@ def test_02_category(self):
   }
 ]
 ```
+
+**Path**: If you used the command `cd tid-service && pip install -r requirements.txt` please switch back to the main directory with `cd ..` after testing :-)
 
 Let's assume we have to annotate an email-service - so picking tag `C01` for category might be a good start. Do the same for other Data Disclosed properties - and other supported [TIL](https://transparency-information-language.github.io/schema/index.html) objects to assemble the necessary tags for [step 2](#2-annotating-services-with-transparency-information).
 
@@ -153,6 +158,8 @@ class EmailService(demo_pb2_grpc.EmailServicer):
     span.set_attribute("ti_tct01", ["TCT01"])
     ...
 ```
+
+Let's keep an eye on the first tag list *ti_c01* with the tag *C01* for E-mail address (mentioned in [step 1](#1-request-tags-for-transparency-information)) for later reference.
 
 Having done that with all your services you are now good to go to reap the benefits. [Test](#test-to-generate-traces) your application, use standard test strategies to ensure service coverage and generate ex-ante [formatted Transparency Information](#collect-transparency-information-from-traces) for use with further tools such as [TILT](#sources).
 
@@ -188,10 +195,7 @@ def test_06_frontend_create_account():
 The test case triggers the service *frontend* to send a request for creating a new user account to service *accountservice* and asserts a successful response.
 As you can see - the test tool and the test definition have no connection to tracing nor tid-specific annotations.
 
-For this demonstration just run *tid-service/integration_test.py* to generate traces. Just connect to the tid-service container (Docker or pod (Kubernetes) (the following commands are for use with Docker containers, the Kubernetes commands are very similar):
-
-- `docker exec -it transparency_tracing-tidservice-1 bash` to connect to the tid-service container and use its bash shell
-- `pytest integration_test.py` to run the integration test
+Run the test, either locally or in the *tid-service* container (compare [step 1](#1-request-tags-for-transparency-information)), with `pytest integration_test.py` to trigger the integration test.
 
 As an alternative you can also open the minimal webpage provided by the frontend service to manually trigger service calls. For the docker compose setup the frontend can be found at <http://localhost:5000/>.
 
@@ -202,21 +206,109 @@ Make sure that you expose jaegers gRPC query port to enable [trace querying for 
 
 You can see the traces generated in [step 3](#3-trigger-integration-test-with-activated-tracing) via the jaeger backend - if you did use the provided docker compose file the backend can be found at <http://localhost:16686>.
 
-The following screenshot is a trace covering multiple services. You can find the familiar tag lists mentioned in [step 2](#2-annotate-services-with-transparency-information) in the expanded tag section for span *emailservice*:
+The following screenshot is a trace covering multiple services. You can find the familiar tag lists mentioned in [step 2](#2-annotate-services-with-transparency-information) in the expanded tag section for span *emailservice* - for example *ti_c01*:
 
 ![trace with tag section for span emailservice expanded](https://github.com/fex01/transparency-information-dictionary/blob/main/images/20220711_trace_expanded.png)
 
-### Collect Transparency Information From Traces
+### 5)-8) Collect Transparency Information From Traces
 
 Now how to go forward from transparency information encoded as tags in traces on the jaeger backend? Thats where the last function offered by our *tid-service* comes into play:
 
-#### 5) Request Formatted Transparency Information From Traces
+The *tid-service* offers a function to get the transparency information from all traces of the last x minutes as formatted [TIL](#tools--technologies) objects - sorted by service:
 
-#### 6) Jaeger Backend Gets Queried Regarding All Services and Traces
+```proto
+# protobufs/tid.proto
 
-#### 7) Returns Collected Traces as JSON
+service TIDict {
+    ...
+    rpc GetTransparencyInformationFromTraces(TransparencyInformationRequest) returns (TransparencyInformationResponse);
+}
 
-#### 8) Filters Traces for Tags and Transforms Them Into TIL Objects
+message TransparencyInformationRequest {
+    int32 cover_traces_of_the_last_x_min = 1;
+}
+
+message TransparencyInformationResponse {
+    repeated ServiceRelatedTransparencyInformation services = 1;
+    message ServiceRelatedTransparencyInformation {
+        string service = 1;
+        repeated DataDisclosed data_disclosed_entries = 2;
+        repeated ThirdCountryTransfer third_country_transfers = 3;
+        repeated ChangesOfPurpose changes_of_purposes = 4;
+    }
+}
+```
+
+Once again will will have a look into *tid-service/tid_test.py* to see how to use this function:
+
+```python
+# tid-service/tid_test.py
+...
+def test_14_for_traces_from_all_services(self):
+  response = tid_server.GetTransparencyInformationFromTraces(
+      tid_pb2.TransparencyInformationRequest(cover_traces_of_the_last_x_min=30), None
+  )
+  pprint(response)
+  ...  # some assertions follow to validate the response
+...
+```
+
+If you want to run the test yourself (compare [step 1](#1-request-tags-for-transparency-information)) execute `pytest -s tid_test.py::TestTIDictService::test_14_for_traces_from_all_services`.
+
+- remember the flag `-s` to actually show to output in the console
+- the traces for the last 30 minutes are requested (compare `cover_traces_of_the_last_x_min=30`), if your last service call was longer ago you will get empty results
+
+```txt
+// abbreviated output for tid_test.py::TestTIDictService::test_14_for_traces_from_all_services
+
+tid_test.py services {
+  service: "emailservice"
+  data_disclosed_entries {
+    id: "C01_R02_COA7_C1_ST11"
+    category: "E-mail address"
+    purposes {
+      id: "COA7_C1"
+      purpose: "Communications"
+      description: "Data are processed for any activities that are focused on communication with the customer."
+    }
+    recipients {
+      id: "R02"
+      name: "Best Communication Delivery Company AG"
+      division: "Third Party E-mail Service"
+      address: "Triana 123, 9999 Seville"
+      country: "ES"
+      representative {
+        name: "Jane Super"
+        email: "contact@yellowcompany.de"
+        phone: "0049 151 1234 9876"
+      }
+      category: "Service provider e-mail"
+    }
+    storage {
+      temporal {
+        description: "Live data - log detention time."
+        ttl: "P0Y0M1W0DT0H0M0S"
+      }
+    }
+  }
+  data_disclosed_entries {...}
+  third_country_transfers {...}
+}
+services {
+  service: "accountservice"
+  ...
+}
+services {
+  service: "courierservice"
+  ...
+}
+services {
+  service: "frontend"
+  ...
+}
+```
+
+As you can see you get a list of all services, each one with all the associated Transparency Information structured according to [TIL]. For example, the fully listed DataDisclosed entry with the id *C01_R02_COA7_C1_ST11* is the result of the tag list *ti_c01* already highlighted in steps [2](#2-annotate-services-with-transparency-information) and [4](#4-spans-are-collected-and-forwarded-as-traces-to-the-jaeger-backend).
 
 ### Adding Transparency Information Values to the Underlying Dictionary
 
@@ -229,8 +321,10 @@ What we do, in the docker compose setup, is mounting the repos dictionary as a b
 - [Transparency Information Language (TIL) Root Schema](https://transparency-information-language.github.io/schema/index.html) - defining a structured language to express transparency information
 - Python gRPC microservices - have a look at [Real Python](https://realpython.com/python-microservices-grpc/#docker) for a great introduction
 - [protocol buffers (protobufs)](https://developers.google.com/protocol-buffers/) - to define our gRPC microservices
-- [OpenTelemetry](https://opentelemetry.io)
-- [Jaeger Tracing](https://www.jaegertracing.io)
+- [OpenTelemetry](https://opentelemetry.io) - a collection of tools, APIs, and SDKs that be used to instrument, generate and collect telemetry data (metrics, logs, and traces) to help analyzing software performance and behavior
+- [Jaeger Tracing](https://www.jaegertracing.io) - distributed tracing system
+  - [Trace retrieval APIs - gRPC/Protobuf (stable)](https://www.jaegertracing.io/docs/1.36/apis/#grpcprotobuf-stable)
+    - due to a number of dependencies generating the Jaeger gRPC stubs requires to clone the [jaeger-idl](https://github.com/jaegertracing/jaeger-idl) (including submodules!)
 - [Docker](https://www.docker.com)
 - Google Cloud Services
   - [Google Cloud Build](https://cloud.google.com/build)
