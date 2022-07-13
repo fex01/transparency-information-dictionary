@@ -151,7 +151,8 @@ class EmailService(demo_pb2_grpc.EmailServicer):
     # get the current span to add attributes to tracing
     span = trace.get_current_span()
     # each TIL objects needs its own line
-    # attribute identifier (first string) needs to start with "ti_", the rest needs to be unique for this span
+    # attribute identifier (first string) needs to start with "ti_",
+    # the rest needs to be unique for this span
     # ti_c01: Data Disclosed object for category C01: E-mail address
     span.set_attribute("ti_c01", ["C01", "R02", "COA7_C1", "ST11"])
     span.set_attribute("ti_c07", ["C07", "COA7_C1", "ST11"])
