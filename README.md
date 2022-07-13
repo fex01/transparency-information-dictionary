@@ -162,7 +162,7 @@ class EmailService(demo_pb2_grpc.EmailServicer):
 
 Let's keep an eye on the first tag list *ti_c01* with the tag *C01* for E-mail address (mentioned in [step 1](#1-request-tags-for-transparency-information)) for later reference.
 
-Having done that with all your services you are now good to go to reap the benefits. [Test](#test-to-generate-traces) your application, use standard test strategies to ensure service coverage and generate ex-ante [formatted Transparency Information](#collect-transparency-information-from-traces) for use with further tools such as [TILT](#sources).
+Having done that with all your services you are now good to go to reap the benefits. [Test](#test-to-generate-traces) your application, use standard test strategies to ensure service coverage and generate ex-ante [formatted Transparency Information](#collect-transparency-information-from-traces) for use with further tools such as [tilt](#sources).
 
 ### Test to Generate Traces
 
@@ -320,6 +320,7 @@ What we do, in the docker compose setup, is mounting the repos dictionary as a b
 ## Tools & Technologies
 
 - [Transparency Information Language (TIL) Root Schema](https://transparency-information-language.github.io/schema/index.html) - defining a structured language to express transparency information
+  - see also the accompanying [Transparency Information Language and Toolkit (tilt)](https://github.com/Transparency-Information-Language)
 - Python gRPC microservices - have a look at [Real Python](https://realpython.com/python-microservices-grpc/#docker) for a great introduction
 - [protocol buffers (protobufs)](https://developers.google.com/protocol-buffers/) - to define our gRPC microservices
 - [OpenTelemetry](https://opentelemetry.io) - a collection of tools, APIs, and SDKs that be used to instrument, generate and collect telemetry data (metrics, logs, and traces) to help analyzing software performance and behavior
