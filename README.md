@@ -24,7 +24,7 @@ Head to section [Tools & Technologies](#tools--technologies) to find further inf
   - [Test to Generate Traces](#test-to-generate-traces)
     - [3) Trigger Integration Test With Activated Tracing](#3-trigger-integration-test-with-activated-tracing)
     - [4) Spans Are Collected And Forwarded as Traces to the Jaeger Backend](#4-spans-are-collected-and-forwarded-as-traces-to-the-jaeger-backend)
-  - [5)-8) Collect Transparency Information From Traces](#5-8-collect-transparency-information-from-traces)(#8-filters-traces-for-tags-and-transforms-them-into-til-objects)
+  - [5)-8) Collect Transparency Information From Traces](#5-8-collect-transparency-information-from-traces)
   - [Adding Transparency Information Values to the Underlying Dictionary](#adding-transparency-information-values-to-the-underlying-dictionary)
 - [Tools & Technologies](#tools--technologies)
 - [Thanks](#thanks)
