@@ -28,7 +28,6 @@ Head to section [Tools & Technologies](#tools--technologies) to find further inf
   - [Adding Transparency Information Values to the Underlying Dictionary](#adding-transparency-information-values-to-the-underlying-dictionary)
 - [Tools & Technologies](#tools--technologies)
 - [Thanks](#thanks)
-- [Footnotes](#footnotes)
 
 ## Spin Up
 
@@ -313,7 +312,7 @@ As you can see you get a list of all services, each one with all the associated 
 
 ### Adding Transparency Information Values to the Underlying Dictionary
 
-We are not providing any tool assistant for filling / adapting the underlying dictionary - that might, including a concept to restrict dictionary adaption to specific access conditions and expanding the service to additional [TIL](#tools--technologies) properties, be it's own further project.
+We are not providing any tool support for filling / adapting the underlying dictionary - that might, including a concept to restrict dictionary adaption to specific access conditions and expanding the service to additional [TIL](#tools--technologies) properties, be it's own further project.
 
 What we do, in the docker compose setup, is mounting the repos dictionary as a bind mount into the *tid-service* container. As such everybody with access to the host running the container can use whatever tools are preferred to edit the JSON file *dictionary/TransparencyInformationDictionary.json*. This is possible during the runtime of the container, the service will incorporate changes to said file on the fly.
 
@@ -322,16 +321,59 @@ What we do, in the docker compose setup, is mounting the repos dictionary as a b
 - [Transparency Information Language (TIL) Root Schema](https://transparency-information-language.github.io/schema/index.html) - defining a structured language to express transparency information
   - see also the accompanying [Transparency Information Language and Toolkit (tilt)](https://github.com/Transparency-Information-Language)
 - Python gRPC microservices - have a look at [Real Python](https://realpython.com/python-microservices-grpc/#docker) for a great introduction
-- [protocol buffers (protobufs)](https://developers.google.com/protocol-buffers/) - to define our gRPC microservices
-- [OpenTelemetry](https://opentelemetry.io) - a collection of tools, APIs, and SDKs that be used to instrument, generate and collect telemetry data (metrics, logs, and traces) to help analyzing software performance and behavior
-- [Jaeger Tracing](https://www.jaegertracing.io) - distributed tracing system
-  - [Trace retrieval APIs - gRPC/Protobuf (stable)](https://www.jaegertracing.io/docs/1.36/apis/#grpcprotobuf-stable)
-    - due to a number of dependencies generating the Jaeger gRPC stubs requires to clone the [jaeger-idl](https://github.com/jaegertracing/jaeger-idl) (including submodules!)
-- [Docker](https://www.docker.com)
-- Google Cloud Services
-  - [Google Cloud Build](https://cloud.google.com/build)
-  - [Google Cloud Artifact Registry](https://cloud.google.com/artifact-registry)
-  - [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine)
+  - [protocol buffers (protobufs)](https://developers.google.com/protocol-buffers/) - to define our gRPC microservices
+  - Google is providing an example demonstrator with services implemented in multiple languages at <https://github.com/GoogleCloudPlatform/microservices-demo>
+- Tracing
+  - [OpenTelemetry](https://opentelemetry.io) - a collection of tools, APIs, and SDKs that be used to instrument, generate and collect telemetry data (metrics, logs, and traces) to help analyzing software performance and behavior
+  - [Jaeger Tracing](https://www.jaegertracing.io) - distributed tracing system
+    - [Trace retrieval APIs - gRPC/Protobuf (stable)](https://www.jaegertracing.io/docs/1.36/apis/#grpcprotobuf-stable)
+      - due to a number of dependencies generating the Jaeger gRPC stubs requires to clone the [jaeger-idl](https://github.com/jaegertracing/jaeger-idl) (including submodules!)
+  - based on the before mentioned Google microservice demo, the following project from [Juliano Costa](https://github.com/julianocosta89) is demonstrating OpenTelemetry based tracing: [opentelemetry-microservice-demo](https://github.com/julianocosta89/opentelemetry-microservices-demo)
+
+### Google Cloud Services
+
+As base for a [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine) deployment you can find automatically updated images via the [Google Cloud Artifact Registry](https://cloud.google.com/artifact-registry). In the end [I was not able to get the GKE deployment to work](#kubernetes), but non the less the following remarks might help fellow students with the first few steps:
+
+For automated cloud builds you find the following *cloudbuild.yaml* file in this repository:
+
+```yaml
+# ./cloudbuild.yaml
+
+steps:
+- name: gcr.io/cloud-builders/docker
+  args:
+    - build
+    - '-t'
+    - '$_DEPLOY_REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$TRIGGER_NAME'
+    - .
+    - '-f'
+    - $_DOCKERFILE_PATH/Dockerfile
+  id: Build
+- name: 'gcr.io/cloud-builders/docker'
+  args:
+    - push
+    - '$_DEPLOY_REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$TRIGGER_NAME'
+  id: Push
+images:
+  - '$_DEPLOY_REGION-docker.pkg.dev/$PROJECT_ID/$REPO_NAME/$TRIGGER_NAME'
+```
+
+This file is used by triggers created via [Google Cloud Build](https://cloud.google.com/build) for each service to provide updated images on detecting changes to the corresponding service directories in this repository. The following are the relevant configuration values for *tid-service* as an example:
+
+- Name: tid-service
+- Event: Push to branch
+- Source: fex01/transparency-information-dictionary (GitHub App)
+  - You need to link your Google Cloud account to your respective repository for that to work. You find a *CONNECT REPOSITORY* on [Cloud Build/Triggers](https://console.cloud.google.com/cloud-build/triggers) or can do that during creation of a trigger.
+- Branch: `^main$`
+- Include files filter (glob): `tid-service/**`
+- Configuration:
+  - Type: Cloud Build configuration file (YAML or JSON)
+  - Location: Repository
+    - cloudbuild.yaml
+- Substitution variables:
+  - _DEPLOY_REGION: europe-north1
+    - choose whatever region you prefer
+  - _DOCKERFILE_PATH: tid-service
 
 ## Thanks
 
