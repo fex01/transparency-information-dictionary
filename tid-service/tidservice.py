@@ -530,7 +530,7 @@ def serve():
 
     tid_pb2_grpc.add_TIDictServicer_to_server(TIDService(), server)
     health_pb2_grpc.add_HealthServicer_to_server(TIDService(), server)
-    port = port = os.getenv("TID_SERVICE_PORT", "9000")
+    port = os.getenv("TID_SERVICE_PORT", "9000")
     server.add_insecure_port("[::]:" + port)
     server.start()
 
