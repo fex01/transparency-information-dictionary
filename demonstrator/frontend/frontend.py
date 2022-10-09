@@ -30,15 +30,15 @@ app.config.update(
     }
 )
 
-account_host = os.getenv("ACCOUNT_SERVICE_HOST", "localhost")
-account_port = os.getenv("ACCOUNT_SERVICE_PORT", "6000")
+account_host = os.getenv("ACCOUNTSERVICE_SERVICE_HOST", "localhost")
+account_port = os.getenv("ACCOUNTSERVICE_SERVICE_PORT", "6000")
 account_channel = grpc.insecure_channel(
     f"{account_host}:{account_port}"
 )
 account_server = demo_pb2_grpc.AccountStub(account_channel)
 
-courier_host = os.getenv("COURIER_SERVICE_HOST", "localhost")
-courier_port = os.getenv("COURIER_SERVICE_PORT", "7000")
+courier_host = os.getenv("COURIERSERVICE_SERVICE_HOST", "localhost")
+courier_port = os.getenv("COURIERSERVICE_SERVICE_PORT", "7000")
 courier_channel = grpc.insecure_channel(
     f"{courier_host}:{courier_port}"
 )

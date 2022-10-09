@@ -30,7 +30,7 @@ spec:
         - containerPort: 16685 # Protobuf/gRPC QueryService
         - containerPort: 16686 # serve frontend
         env:
-        - name: COLLECTOR_ZIPKIN_HOST_PORT
+        - name: JAEGER_SERVICE_PORT_ZIPKIN_ENDPOINT
           value: ":9411"
         resources:
           requests:
@@ -135,10 +135,10 @@ spec:
   selector:
     app: otelcollector
   ports:
-  - name: "1888"
+  - name: "pprof"
     port: 1888
     targetPort: 1888
-  - name: "4317"
+  - name: "otlp-receiver"
     port: 4317
     targetPort: 4317
   - name: "8888"
@@ -147,10 +147,10 @@ spec:
   - name: "8889"
     port: 8889
     targetPort: 8889
-  - name: "13133"
+  - name: "health_check"
     port: 13133
     targetPort: 13133
-  - name: "55670"
+  - name: "zpages"
     port: 55670
     targetPort: 55670
 ---
@@ -184,16 +184,6 @@ spec:
               path: /healthz/live
               port: 5000
           env:
-          - name: FRONTEND_PORT
-            value: "5000"
-          - name: ACCOUNT_SERVICE_HOST
-            value: "accountservice"
-          - name: ACCOUNT_SERVICE_PORT
-            value: "6000"
-          - name: COURIER_SERVICE_HOST
-            value: "courierservice"
-          - name: COURIER_SERVICE_PORT
-            value: "7000"
           - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
             value: "http://otelcollector:4317"
           - name: OTEL_RESOURCE_ATTRIBUTES
@@ -253,12 +243,6 @@ spec:
         ports:
         - containerPort: 6000
         env:
-        - name: ACCOUNT_SERVICE_PORT
-          value: "6000"
-        - name: EMAIL_SERVICE_HOST
-          value: "emailservice"
-        - name: EMAIL_SERVICE_PORT
-          value: "8000"
         - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
           value: "http://otelcollector:4317"
         - name: OTEL_RESOURCE_ATTRIBUTES
@@ -313,16 +297,6 @@ spec:
         ports:
         - containerPort: 7000
         env:
-        - name: COURIER_SERVICE_PORT
-          value: "7000"
-        - name: ACCOUNT_SERVICE_HOST
-          value: "accountservice"
-        - name: ACCOUNT_SERVICE_PORT
-          value: "6000"
-        - name: EMAIL_SERVICE_HOST
-          value: "emailservice"
-        - name: EMAIL_SERVICE_PORT
-          value: "8000"
         - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
           value: "http://otelcollector:4317"
         - name: OTEL_RESOURCE_ATTRIBUTES
@@ -377,8 +351,6 @@ spec:
         ports:
         - containerPort: 8000
         env:
-        - name: EMAIL_SERVICE_PORT
-          value: "8000"
         - name: OTEL_EXPORTER_OTLP_TRACES_ENDPOINT
           value: "http://otelcollector:4317"
         - name: OTEL_RESOURCE_ATTRIBUTES
@@ -433,24 +405,6 @@ spec:
         ports:
         - containerPort: 9000
         env:
-        - name: TID_SERVICE_PORT
-          value: "9000"
-        - name: JAEGER_HOST
-          value: "jaeger"
-        - name: JAEGER_QUERY_PORT
-          value: "16685"
-        - name: ACCOUNT_SERVICE_HOST
-          value: "accountservice"
-        - name: ACCOUNT_SERVICE_PORT
-          value: "6000"
-        - name: COURIER_SERVICE_HOST
-          value: "courierservice"
-        - name: COURIER_SERVICE_PORT
-          value: "7000"
-        - name: EMAIL_SERVICE_HOST
-          value: "emailservice"
-        - name: EMAIL_SERVICE_PORT
-          value: "8000"
         - name: TI_DICTIONARY_NAME
           value: "TransparencyInformationDictionary.json"
         readinessProbe:

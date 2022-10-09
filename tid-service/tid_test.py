@@ -6,7 +6,7 @@ import tid_pb2_grpc
 import grpc
 
 tid_host = "localhost"
-tid_port = os.getenv("TID_SERVICE_PORT", "9000")
+tid_port = os.getenv("TIDSERVICE_SERVICE_PORT", "9000")
 tid_channel = grpc.insecure_channel(
     f"{tid_host}:{tid_port}"
 )

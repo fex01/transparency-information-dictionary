@@ -20,15 +20,15 @@ tracer_provider = TracerProvider()
 trace.set_tracer_provider(tracer_provider)
 tracer_provider.add_span_processor(BatchSpanProcessor(OTLPSpanExporter()))
 
-email_host = os.getenv("EMAIL_SERVICE_HOST", "localhost")
-email_port = os.getenv("EMAIL_SERVICE_PORT", "8000")
+email_host = os.getenv("EMAILSERVICE_SERVICE_HOST", "localhost")
+email_port = os.getenv("EMAILSERVICE_SERVICE_PORT", "8000")
 email_channel = grpc.insecure_channel(
     f"{email_host}:{email_port}"
 )
 email_stub = demo_pb2_grpc.EmailStub(email_channel)
 
-account_host = os.getenv("ACCOUNT_SERVICE_HOST", "localhost")
-account_port = os.getenv("ACCOUNT_SERVICE_PORT", "6000")
+account_host = os.getenv("ACCOUNTSERVICE_SERVICE_HOST", "localhost")
+account_port = os.getenv("ACCOUNTSERVICE_SERVICE_PORT", "6000")
 account_channel = grpc.insecure_channel(
     f"{account_host}:{account_port}"
 )
@@ -96,7 +96,7 @@ def serve():
 
     demo_pb2_grpc.add_CourierServicer_to_server(CourierService(), server)
     health_pb2_grpc.add_HealthServicer_to_server(CourierService(), server)
-    port = os.getenv("COURIER_SERVICE_PORT", "7000")
+    port = os.getenv("COURIERSERVICE_SERVICE_PORT", "7000")
     server.add_insecure_port("[::]:" + port)
     server.start()
 

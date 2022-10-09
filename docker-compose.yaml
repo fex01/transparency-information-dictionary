@@ -4,8 +4,8 @@ services:
     jaeger:
         image: jaegertracing/opentelemetry-all-in-one:latest
         environment:
-            - COLLECTOR_ZIPKIN_HOST_PORT
-        hostname: "${JAEGER_HOST}"
+            - JAEGER_SERVICE_PORT_ZIPKIN_ENDPOINT
+        hostname: "${JAEGER_SERVICE_HOST}"
         networks:
             - tt
         ports:
@@ -17,14 +17,14 @@ services:
             - "14250:14250" # accept model.proto
             - "14268:14268" # accept jaeger.thrift directly from clients
             - "14269:14269" # admin port: health check at / and metrics at /metrics
-            - "${JAEGER_QUERY_PORT}:16685" # Protobuf/gRPC QueryService
+            - "${JAEGER_SERVICE_PORT_GRPC}:16685" # Protobuf/gRPC QueryService
             - "16686:16686" # serve frontend
     otelcollector:
         build:
             context: .
             dockerfile: demonstrator/otelcollector/Dockerfile
         image: otelcollector
-        hostname: "${OTEL_COLLECTOR_HOST}"
+        hostname: "${OTELCOLLECTOR_SERVICE_HOST}"
         #        volumes:
         #            # to export traces in a json file
         #            - type: bind
@@ -47,13 +47,13 @@ services:
         #            dockerfile: demonstrator/email_service/Dockerfile_wt  # for performance measurements
         image: email_service
         environment:
-            - OTEL_EXPORTER_OTLP_ENDPOINT
+            - OTELCOLLECTOR_SERVICE_PORT_OTLP_RECEIVER
             - OTEL_RESOURCE_ATTRIBUTES=service.name=emailservice
-        hostname: "${EMAIL_SERVICE_HOST}"
+        hostname: "${EMAILSERVICE_SERVICE_HOST}"
         networks:
             - tt
         ports:
-            - "${EMAIL_SERVICE_PORT}:${EMAIL_SERVICE_PORT}"
+            - "${EMAILSERVICE_SERVICE_PORT}:${EMAILSERVICE_SERVICE_PORT}"
         depends_on:
             - jaeger
             - otelcollector
@@ -64,16 +64,16 @@ services:
         #            dockerfile: demonstrator/account_service/Dockerfile_wt  # for performance measurements
         image: account_service
         environment:
-            - ACCOUNT_SERVICE_PORT
-            - EMAIL_SERVICE_HOST
-            - EMAIL_SERVICE_PORT
-            - OTEL_EXPORTER_OTLP_ENDPOINT
+            - ACCOUNTSERVICE_SERVICE_PORT
+            - EMAILSERVICE_SERVICE_HOST
+            - EMAILSERVICE_SERVICE_PORT
+            - OTELCOLLECTOR_SERVICE_PORT_OTLP_RECEIVER
             - OTEL_RESOURCE_ATTRIBUTES=service.name=accountservice
-        hostname: "${ACCOUNT_SERVICE_HOST}"
+        hostname: "${ACCOUNTSERVICE_SERVICE_HOST}"
         networks:
             - tt
         ports:
-            - "${ACCOUNT_SERVICE_PORT}:${ACCOUNT_SERVICE_PORT}"
+            - "${ACCOUNTSERVICE_SERVICE_PORT}:${ACCOUNTSERVICE_SERVICE_PORT}"
         depends_on:
             - jaeger
             - otelcollector
@@ -85,18 +85,18 @@ services:
         #            dockerfile: demonstrator/courier_service/Dockerfile_wt  # for performance measurements
         image: courier_service
         environment:
-            - COURIER_SERVICE_PORT
-            - EMAIL_SERVICE_HOST
-            - EMAIL_SERVICE_PORT
-            - ACCOUNT_SERVICE_HOST
-            - ACCOUNT_SERVICE_PORT
-            - OTEL_EXPORTER_OTLP_ENDPOINT
+            - COURIERSERVICE_SERVICE_PORT
+            - EMAILSERVICE_SERVICE_HOST
+            - EMAILSERVICE_SERVICE_PORT
+            - ACCOUNTSERVICE_SERVICE_HOST
+            - ACCOUNTSERVICE_SERVICE_PORT
+            - OTELCOLLECTOR_SERVICE_PORT_OTLP_RECEIVER
             - OTEL_RESOURCE_ATTRIBUTES=service.name=courierservice
-        hostname: "${COURIER_SERVICE_HOST}"
+        hostname: "${COURIERSERVICE_SERVICE_HOST}"
         networks:
             - tt
         ports:
-            - "${COURIER_SERVICE_PORT}:${COURIER_SERVICE_PORT}"
+            - "${COURIERSERVICE_SERVICE_PORT}:${COURIERSERVICE_SERVICE_PORT}"
         depends_on:
             - jaeger
             - otelcollector
@@ -109,17 +109,17 @@ services:
         #            dockerfile: demonstrator/frontend/Dockerfile_wt  # for performance measurements
         image: frontend
         environment:
-            - ACCOUNT_SERVICE_HOST
-            - ACCOUNT_SERVICE_PORT
-            - COURIER_SERVICE_HOST
-            - COURIER_SERVICE_PORT
-            - OTEL_EXPORTER_OTLP_ENDPOINT
+            - ACCOUNTSERVICE_SERVICE_HOST
+            - ACCOUNTSERVICE_SERVICE_PORT
+            - COURIERSERVICE_SERVICE_HOST
+            - COURIERSERVICE_SERVICE_PORT
+            - OTELCOLLECTOR_SERVICE_PORT_OTLP_RECEIVER
             - OTEL_RESOURCE_ATTRIBUTES=service.name=frontend
-        hostname: "${FRONTEND_HOST}"
+        hostname: "${FRONTEND_SERVICE_HOST}"
         networks:
             - tt
         ports:
-            - "${FRONTEND_PORT}:${FRONTEND_PORT}"
+            - "${FRONTEND_SERVICE_PORT}:${FRONTEND_SERVICE_PORT}"
         depends_on:
             - jaeger
             - otelcollector
@@ -131,18 +131,18 @@ services:
             dockerfile: tid-service/Dockerfile
         image: tidservice
         environment:
-            - JAEGER_HOST
-            - JAEGER_QUERY_PORT
-            - FRONTEND_HOST # for integration test
-            - FRONTEND_PORT # for integration test
-            - ACCOUNT_SERVICE_HOST # for integration test
-            - ACCOUNT_SERVICE_PORT # for integration test
-            - COURIER_SERVICE_HOST # for integration test
-            - COURIER_SERVICE_PORT # for integration test
-            - EMAIL_SERVICE_HOST # for integration test
-            - EMAIL_SERVICE_PORT # for integration test
-            - TID_SERVICE_HOST
-            - TID_SERVICE_PORT
+            - JAEGER_SERVICE_HOST
+            - JAEGER_SERVICE_PORT_GRPC
+            - FRONTEND_SERVICE_HOST # for integration test
+            - FRONTEND_SERVICE_PORT # for integration test
+            - ACCOUNTSERVICE_SERVICE_HOST # for integration test
+            - ACCOUNTSERVICE_SERVICE_PORT # for integration test
+            - COURIERSERVICE_SERVICE_HOST # for integration test
+            - COURIERSERVICE_SERVICE_PORT # for integration test
+            - EMAILSERVICE_SERVICE_HOST # for integration test
+            - EMAILSERVICE_SERVICE_PORT # for integration test
+            - TIDSERVICE_SERVICE_HOST
+            - TIDSERVICE_SERVICE_PORT
             - TI_DICTIONARY_NAME
         volumes:
             # - type: bind                    # for development only
@@ -153,11 +153,11 @@ services:
               source: ./dictionary
               target: /services/dictionary
               read_only: true
-        hostname: "${TID_SERVICE_HOST}"
+        hostname: "${TIDSERVICE_SERVICE_HOST}"
         networks:
             - tt
         ports:
-            - "${TID_SERVICE_PORT}:${TID_SERVICE_PORT}"
+            - "${TIDSERVICE_SERVICE_PORT}:${TIDSERVICE_SERVICE_PORT}"
 
 networks:
     tt:

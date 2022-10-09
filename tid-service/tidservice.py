@@ -16,8 +16,8 @@ from time import time
 from google.protobuf.timestamp_pb2 import Timestamp
 import query_pb2, query_pb2_grpc
 
-jaeger_host = os.getenv("JAEGER_HOST", "localhost")
-jaeger_port = os.getenv("JAEGER_QUERY_PORT", "16685")
+jaeger_host = os.getenv("JAEGER_SERVICE_HOST", "localhost")
+jaeger_port = os.getenv("JAEGER_SERVICE_PORT_GRPC", "16685")
 jaeger_channel = grpc.insecure_channel(
     f"{jaeger_host}:{jaeger_port}"
 )
@@ -530,7 +530,7 @@ def serve():
 
     tid_pb2_grpc.add_TIDictServicer_to_server(TIDService(), server)
     health_pb2_grpc.add_HealthServicer_to_server(TIDService(), server)
-    port = os.getenv("TID_SERVICE_PORT", "9000")
+    port = os.getenv("TIDSERVICE_SERVICE_PORT", "9000")
     server.add_insecure_port("[::]:" + port)
     server.start()
 

@@ -128,7 +128,7 @@ def serve():
 
     demo_pb2_grpc.add_AccountServicer_to_server(AccountService(), server)
     health_pb2_grpc.add_HealthServicer_to_server(AccountService(), server)
-    port = os.getenv("ACCOUNT_SERVICE_PORT", "6000")
+    port = os.getenv("ACCOUNTSERVICE_SERVICE_PORT", "6000")
     server.add_insecure_port("[::]:" + port)
     server.start()
 
