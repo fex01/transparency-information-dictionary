@@ -147,7 +147,7 @@ spec:
   - name: "8889"
     port: 8889
     targetPort: 8889
-  - name: "health_check"
+  - name: "health-check"
     port: 13133
     targetPort: 13133
   - name: "zpages"
