@@ -49,34 +49,34 @@ spec:
   selector:
     app: jaeger
   ports:
-  - name: "5775"
+  - name: "ZIPKIN_THRIFT"
     port: 5775
     targetPort: 5775
     protocol: UDP
-  - name: "5778"
+  - name: "CONFIG"
     port: 5778
     targetPort: 5778
-  - name: "6831"
+  - name: "JAEGER_THRIFT_COMPACT"
     port: 6831
     targetPort: 6831
     protocol: UDP
-  - name: "6832"
+  - name: "JAEGER_THRIFT_BINARY"
     port: 6832
     targetPort: 6832
     protocol: UDP
-  - name: "9411"
+  - name: "ZIPKIN_ENDPOINT"
     port: 9411
     targetPort: 9411
-  - name: "14250"
+  - name: "MODEL_PROTO"
     port: 14250
     targetPort: 14250
-  - name: "14268"
+  - name: "JAEGER_THRIFT_DIRECT"
     port: 14268
     targetPort: 14268
-  - name: "14269"
+  - name: "ADMIN"
     port: 14269
     targetPort: 14269
-  - name: "16685"
+  - name: "GRPC"
     port: 16685
     targetPort: 16685
 ---
