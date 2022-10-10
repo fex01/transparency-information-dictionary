@@ -198,13 +198,13 @@ As you can see - the test tool and the test definition have no connection to tra
 
 Run the test, either locally or in the *tid-service* container (compare [step 1](#1-request-tags-for-transparency-information)), with `pytest integration_test.py` to trigger the integration test.
 
-As an alternative you can also open the minimal webpage provided by the frontend service to manually trigger service calls. For the docker compose setup the frontend can be found at <http://localhost:5000/>.
+As an alternative you can also open the minimal webpage provided by the frontend service to manually trigger service calls. For the docker compose setup the frontend can be found at <http://localhost:5000/><sup id="a7">[7](#f7)</sup>.
 
 #### 4) Spans Are Collected And Forwarded as Traces to the Jaeger Backend
 
 To collect traces with [OpenTelemetry](https://opentelemetry.io) and [Jaeger](https://www.jaegertracing.io) we are using an OpenTelemetry Collector (service *otelcollector*) and the [*jaegertracing/opentelemetry-all-in-one*](https://www.jaegertracing.io/docs/1.35/getting-started/) image as tracing backend.
 
-You can see the traces generated in [step 3](#3-trigger-integration-test-with-activated-tracing) via the jaeger backend - if you did use the provided docker compose file the backend can be found at <http://localhost:16686>.
+You can see the traces generated in [step 3](#3-trigger-integration-test-with-activated-tracing) via the jaeger backend - if you did use the provided docker compose file the backend can be found at <http://localhost:16686><sup id="a8">[8](#f8)</sup>.
 
 The following screenshot is a trace covering multiple services. You can find the familiar tag lists mentioned in [step 2](#2-annotate-services-with-transparency-information) in the expanded tag section for span *emailservice* - for example *ti_c01*:
 
@@ -332,7 +332,7 @@ What we do, in the docker compose setup, is mounting the repos dictionary as a b
 
 ### Google Cloud Services
 
-As base for a [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine) deployment you can find automatically updated images via the [Google Cloud Artifact Registry](https://cloud.google.com/artifact-registry). In the end [I was not able to get the GKE deployment to work](#kubernetes), but non the less the following remarks might help fellow students with the first few steps:
+As base for a [Google Kubernetes Engine (GKE)](https://cloud.google.com/kubernetes-engine) deployment you can find automatically updated images via the [Google Cloud Artifact Registry](https://cloud.google.com/artifact-registry). The following remarks might help fellow students with the first few steps:
 
 For automated cloud builds you find the following *cloudbuild.yaml* file in this repository:
 
@@ -388,3 +388,5 @@ This file is used by triggers created via [Google Cloud Build](https://cloud.goo
 <b id="f4">4</b>: **Problem**  - inter-pod communication: Communication to / from jaeger OpenTelemetry Collector, Jaeger backend, flask Frontend and our tid-service seem to work - but for reasons not understood the communication between our demonstrators gRPC service seems not to work. **Fixed** by taking the time to learn about Kubernetes architecture, especially about the function of control nodes, worker nodes, services and pods it becomes understandable why the first approach of trying to reach container via hostnames similar to the docker compose setup couldn't work and fixing it by making use of the variables populated by kubernetes. For example: `ACCOUNT_SERVICE_HOST` became `ACCOUNTSERVICE_SERVICE_HOST` to be populated by the **kubelet** demon with the IP address of the service resource connected with the relevant pod(s). For a short explanation have a look at [kubernetes.io](https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/#environment-variables). [↩](#a4)  
 <b id="f5">5</b>: Tested with [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine/), version 1.22.12-gke.2300 on 3 e2-medium nodes [↩](#a5)  
 <b id="f6">6</b>: For a kubernetes deployment use `kubectl get pods` to get the relevant pod name and `kubectl exec -it podname -- bash` to connect via bash shell. [↩](#a6)  
+<b id="f7">7</b>: For Kubernetes you can either use the UI or connect to any of the pods and run the following command the get the IP address for service `frontend external`, port is *80* for http: `echo $FRONTEND_EXTERNAL_SERVICE_HOST`[↩](#a7)  
+<b id="f8">8</b>: For Kubernetes you can either use the UI or connect to any of the pods and run the following command the get the IP address for service `jaeger-frontend`, port is the same - *16686*: `echo $JAEGER_FRONTEND_SERVICE_HOST`[↩](#a8)  
