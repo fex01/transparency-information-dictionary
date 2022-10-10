@@ -44,12 +44,13 @@ For now it's enough to have an environment with git<sup id="a1">[1](#f1)</sup>, 
 
 ### Kubernetes
 
-The images are provided at `europe-north1-docker.pkg.dev/ti-dictionary/transparency-information-dictionary/<service-name>` via the [Google Artifact Registry](#tools--technologies) (complete with automated builds via this repository). A kubernetes manifest was created and is part of this repository - but the author could not get the deployment to work via the [Google Kubernetes Engine (GKE)](#tools--technologies). The main problems seem to be:
+The images are provided at `europe-north1-docker.pkg.dev/ti-dictionary/transparency-information-dictionary/<service-name>` via the [Google Artifact Registry](#tools--technologies) (complete with automated builds via this repository). A kubernetes manifest was created and is part of this repository.
 
-- FIXED<sup id="a3">[3](#f3)</sup>: discover ready/live status for gRPC services: Our gRPC services support ready/live status via [grpc health probe](https://github.com/grpc-ecosystem/grpc-health-probe), which works fine for Docker Desktops local Kubernetes cluster, but does not seem to work with GKE.
-- inter-pod communication: Communication to / from jaeger OpenTelemetry Collector, Jaeger backend, flask Frontend and our tid-service seem to work - but for reasons not understood the communication between our demonstrators gRPC service seems not to work.
+While the kubernetes deployment provided some additional challenges<sup id="a3">[3](#f3)</sup><sup id="a4">[4](#f4)</sup>, they are now overcome and the following steps should enable you to deploy the demonstrator with kubernetes<sup id="a6">[6](#f6)</sup>:
 
-Hints why our Kubernetes deployment does not run as expected, especially after going trough all the work of understanding how to build, register and publish images in the cloud and trying to understand the differences between a docker compose deploy and Kubernetes would be highly appreciated...
+- `git clone https://github.com/fex01/transparency-information-dictionary.git` clone the repository
+- `cd transparency-information-dictionary` move into the repos directory
+- `kubectl apply -f kubernetes-manifest.yaml` deploy
 
 ## Use
 
@@ -113,7 +114,7 @@ def test_02_category(self):
 ...
 ```
 
-If you want to run the test yourself you can either install the necessary requirements locally with `cd tid-service && pip install -r requirements.txt` - or just connect to the tid-service container `docker exec -it transparency_tracing-tidservice-1 bash` to then use  
+If you want to run the test yourself you can either install the necessary requirements locally with `cd tid-service && pip install -r requirements.txt` - or just connect to the tid-service container `docker exec -it transparency_tracing-tidservice-1 bash`<sup id="6">[6](#f6)</sup> to then use  
 
 - `pytest -s tid_test.py::TestTIDictService::test_02_category` to run the test and print the output to the console
   - do not overlook flag `-s` to actually show to output in the console
@@ -202,7 +203,6 @@ As an alternative you can also open the minimal webpage provided by the frontend
 #### 4) Spans Are Collected And Forwarded as Traces to the Jaeger Backend
 
 To collect traces with [OpenTelemetry](https://opentelemetry.io) and [Jaeger](https://www.jaegertracing.io) we are using an OpenTelemetry Collector (service *otelcollector*) and the [*jaegertracing/opentelemetry-all-in-one*](https://www.jaegertracing.io/docs/1.35/getting-started/) image as tracing backend.
-Make sure that you expose jaegers gRPC query port to enable [trace querying for our tid-service](#6-jaeger-backend-gets-queried-regarding-all-services-and-traces).
 
 You can see the traces generated in [step 3](#3-trigger-integration-test-with-activated-tracing) via the jaeger backend - if you did use the provided docker compose file the backend can be found at <http://localhost:16686>.
 
@@ -384,4 +384,7 @@ This file is used by triggers created via [Google Cloud Build](https://cloud.goo
 
 <b id="f1">1</b>: Git as locally installed tool, not a platform like GitHub. [git-scm.com](https://git-scm.com) might be a good starting point to understand the difference und to find an installation for your OS. [↩](#a1)  
 <b id="f2">2</b>: The newer v2 of [`docker-compose`](https://docs.docker.com/compose/) - now without the hyphen `-`. If you are using a current version of Docker Desktop than you are good to go. On Linux you might have to update manually. Relevant, because the old command `docker-compose` might have trouble with the environment variables or other untested side effects. [↩](#a2)  
-<b id="f3">3</b>: Fixed by fixing the architecture used for the Python images: It can be quite fun (not really) to work with different architectures, for example if my personal development machine is running on Apple M1 Hardware (arm64), but Google Cloud Build is defaulting to x64 (amd64) images. This resulted in a wrong version of the gRPC Health Probe tool being installed when deployed via GKE, leading to only marginally helpful error messages...  [↩](#a3)
+<b id="f3">3</b>: **Problem** - discover ready/live status for gRPC services: Our gRPC services support ready/live status via [grpc health probe](https://github.com/grpc-ecosystem/grpc-health-probe), which works fine for Docker Desktops local Kubernetes cluster, but does not seem to work with GKE. **Fixed** by hardcoding the architecture used for the Python images: It can be quite fun (not really) to work with different architectures, for example if my personal development machine is running on Apple M1 Hardware (arm64), but Google Cloud Build is defaulting to x64 (amd64) images. This resulted in a wrong version of the gRPC Health Probe tool being installed when deployed via GKE, leading to only marginally helpful error messages...  [↩](#a3)  
+<b id="f4">4</b>: **Problem**  - inter-pod communication: Communication to / from jaeger OpenTelemetry Collector, Jaeger backend, flask Frontend and our tid-service seem to work - but for reasons not understood the communication between our demonstrators gRPC service seems not to work. **Fixed** by taking the time to learn about Kubernetes architecture, especially about the function of control nodes, worker nodes, services and pods it becomes understandable why the first approach of trying to reach container via hostnames similar to the docker compose setup couldn't work and fixing it by making use of the variables populated by kubernetes. For example: `ACCOUNT_SERVICE_HOST` became `ACCOUNTSERVICE_SERVICE_HOST` to be populated by the **kubelet** demon with the IP address of the service resource connected with the relevant pod(s). For a short explanation have a look at [kubernetes.io](https://kubernetes.io/docs/concepts/services-networking/connect-applications-service/#environment-variables). [↩](#a4)  
+<b id="f5">5</b>: Tested with [Google Kubernetes Engine](https://cloud.google.com/kubernetes-engine/), version 1.22.12-gke.2300 on 3 e2-medium nodes [↩](#a5)  
+<b id="f6">6</b>: For a kubernetes deployment use `kubectl get pods` to get the relevant pod name and `kubectl exec -it podname -- bash` to connect via bash shell. [↩](#a6)  
